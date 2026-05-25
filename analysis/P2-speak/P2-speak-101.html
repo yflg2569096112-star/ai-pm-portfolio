@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P2 配套 · Speak 是什么 · 小白 12 分钟搞懂版</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    color: #1f2937;
+    line-height: 1.75;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.4px; line-height: 1.35; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #DC2626 0%, #F97316 100%);
+    color: white;
+    padding: 28px 32px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(220,38,38,0.25);
+  }
+  .hero h2 {
+    color: white; border-left-color: #fbbf24;
+    font-size: 22px; margin: 0 0 12px;
+  }
+  .hero p { margin: 6px 0; font-size: 15px; }
+  .hero .twin {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .hero .twin > div {
+    background: rgba(255,255,255,0.15);
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .hero .twin .vs {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    opacity: 0.85;
+  }
+
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 26px 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px;
+    border-left: 4px solid #DC2626;
+    padding-left: 12px;
+  }
+  h3 { font-size: 16px; margin: 18px 0 8px; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 5px 0; }
+
+  /* Phone 模拟 */
+  .phone-wrap {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .phone {
+    width: 280px;
+    height: 560px;
+    background: #fff;
+    border-radius: 32px;
+    border: 7px solid #1f2937;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+  }
+  .phone-notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 22px;
+    background: #1f2937;
+    border-radius: 0 0 14px 14px;
+    z-index: 10;
+  }
+  .phone-status {
+    height: 30px; padding: 8px 18px 0;
+    font-size: 12px; font-weight: 600;
+    display: flex; justify-content: space-between;
+    color: #1f2937;
+  }
+  .phone-screen {
+    height: calc(100% - 30px);
+    padding: 8px 14px 14px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+  }
+  .phone-caption {
+    flex: 1;
+    min-width: 220px;
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 4px solid #DC2626;
+    font-size: 14px;
+  }
+
+  /* Speak 主界面 */
+  .speak-header {
+    background: linear-gradient(135deg, #DC2626, #F97316);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .speak-header .logo { font-size: 18px; font-weight: 800; }
+  .speak-header .sub { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+  .lesson-list { display: flex; flex-direction: column; gap: 8px; }
+  .lesson-item {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .lesson-icon {
+    width: 32px; height: 32px;
+    background: white;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    border: 1px solid #e5e7eb;
+  }
+  .lesson-item.live {
+    background: linear-gradient(90deg, #fee2e2, #fff7ed);
+    border-left: 3px solid #DC2626;
+  }
+  .lesson-name { font-weight: 600; }
+  .lesson-meta { color: #6b7280; font-size: 10px; margin-top: 1px; }
+  .lesson-tag {
+    margin-left: auto;
+    background: #DC2626;
+    color: white;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  /* Live Roleplay 界面 */
+  .live-screen {
+    height: 100%;
+    background: linear-gradient(135deg, #1f2937 0%, #DC2626 100%);
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .live-top {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 16px;
+  }
+  .live-mid {
+    flex: 1;
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+  }
+  .live-avatar {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, #F97316, #FBBF24);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px;
+    border: 4px solid white;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    margin-bottom: 10px;
+  }
+  .live-name { font-weight: 700; font-size: 14px; }
+  .live-task {
+    background: rgba(251,191,36,0.3);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    margin-top: 10px;
+    border: 1px solid rgba(251,191,36,0.5);
+  }
+  .live-task .lab { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; opacity: 0.85; }
+  .live-bubble {
+    background: white;
+    color: #1f2937;
+    padding: 8px 12px;
+    border-radius: 12px;
+    border-bottom-left-radius: 4px;
+    font-size: 11px;
+    margin-top: 10px;
+    max-width: 90%;
+  }
+  .live-controls {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    margin-top: 8px;
+  }
+  .lc-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .lc-btn.end { background: #FF4B4B; }
+
+  /* 速度对比 - 接力赛 vs 直传 */
+  .race-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .race {
+    border-radius: 12px;
+    padding: 18px;
+    border: 2px solid;
+  }
+  .race.slow {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: #dc2626;
+  }
+  .race.fast {
+    background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+    border-color: #16a34a;
+  }
+  .race-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .race.slow .race-title { color: #991b1b; }
+  .race.fast .race-title { color: #166534; }
+  .runners {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background: rgba(255,255,255,0.7);
+    border-radius: 8px;
+    padding: 14px 8px;
+    margin: 10px 0;
+  }
+  .runner {
+    text-align: center;
+    font-size: 11px;
+  }
+  .runner .icon {
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .runner .name {
+    font-weight: 600;
+    color: #1f2937;
+  }
+  .runner .role {
+    color: #6b7280;
+    font-size: 10px;
+  }
+  .race-arrow {
+    font-size: 16px;
+    color: #9ca3af;
+  }
+  .race-result {
+    background: rgba(255,255,255,0.6);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .race-time {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .race.slow .race-time { color: #dc2626; }
+  .race.fast .race-time { color: #16a34a; }
+  .race-time-lab {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  /* 间隔重复曲线 */
+  .sr-chart {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 14px 0;
+    position: relative;
+  }
+  .sr-timeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 16px 0 8px;
+    align-items: end;
+  }
+  .sr-day {
+    text-align: center;
+  }
+  .sr-bar {
+    background: linear-gradient(180deg, #DC2626, #F97316);
+    border-radius: 6px 6px 0 0;
+    margin: 0 8px 8px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    padding: 4px 0;
+  }
+  .sr-bar.d1 { height: 80px; }
+  .sr-bar.d3 { height: 55px; }
+  .sr-bar.d7 { height: 35px; }
+  .sr-bar.d14 { height: 22px; }
+  .sr-bar.d30 { height: 14px; }
+  .sr-when {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+  }
+  .sr-label {
+    font-size: 10.5px;
+    color: #9ca3af;
+  }
+
+  /* ASR 类比 */
+  .ear-compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .ear {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    border: 2px solid #e5e7eb;
+  }
+  .ear.win {
+    background: linear-gradient(180deg, #f0fdf4, #ecfdf5);
+    border-color: #16a34a;
+  }
+  .ear-icon { font-size: 36px; margin-bottom: 8px; }
+  .ear-name { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .ear-from {
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+  .ear-score {
+    background: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .ear.win .ear-score { color: #166534; }
+
+  /* 类比表 */
+  .analogy {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid #6ee7b7;
+    margin: 14px 0;
+  }
+  .analogy table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .analogy th, .analogy td {
+    border: 1px solid #d1fae5;
+    padding: 10px 12px;
+    text-align: left;
+    background: white;
+    vertical-align: top;
+  }
+  .analogy th { background: #d1fae5; color: #065f46; font-weight: 700; }
+
+  /* Callout */
+  .callout-tip {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .callout-tip .lab {
+    font-size: 11px; font-weight: 700;
+    color: #1e3a8a; margin-bottom: 4px;
+  }
+
+  /* 术语表 */
+  .glossary {
+    background: #fff7ed;
+    border-radius: 12px;
+    padding: 18px 22px;
+    border-left: 4px solid #f97316;
+    font-size: 13.5px;
+  }
+  .glossary dl { margin: 0; }
+  .glossary dt { font-weight: 700; color: #9a3412; margin-top: 10px; }
+  .glossary dd { margin: 2px 0 8px; color: #4b5563; }
+
+  .small { font-size: 12px; color: #6b7280; }
+</style>
+</head>
+<body>
+
+<h1>Speak 是什么 · 小白 12 分钟搞懂版</h1>
+<div class="subtitle">P2 配套科普 ｜ 看完这页再回去看 P2 主拆解，"端到端 speech-to-speech / Realtime API / Conformer-CTC / Spaced Repetition" 这些词都会变成日常话</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>一句话先记住</h2>
+  <p><strong>Speak</strong> 是 OpenAI 投资的 AI 口语学习 App，靠"<strong>逼你开口</strong>"的产品策略做到 $1B 独角兽，主战场韩国和日本，最近 2024-10 上线了 Live Roleplays。</p>
+  <div class="twin">
+    <div>
+      <div class="vs">🟢 Speak 主打</div>
+      <strong>说出来</strong> — 每节课强制开口，speaking 时长是其他 App 的 5-10 倍
+    </div>
+    <div>
+      <div class="vs">🔴 Duolingo 主打</div>
+      <strong>打卡式刷题</strong> — 点击 / 拖拽 / 跟读，开口量极少
+    </div>
+  </div>
+  <p style="margin-top:14px;font-size:14px;opacity:0.95;">▼ 下面用 4 个模拟界面 + 3 张图，让你一眼看懂 Speak 长什么样、核心技术是什么</p>
+</div>
+
+<!-- ① Speak 主界面 -->
+<div class="section">
+  <h2>① Speak 打开后是什么样</h2>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-status"><span>9:41</span><span>📶 ⚡ 100%</span></div>
+      <div class="phone-screen">
+        <div class="speak-header">
+          <div class="logo">Speak</div>
+          <div class="sub">英语 · A2 Level · Day 23</div>
+        </div>
+        <div class="lesson-list">
+          <div class="lesson-item">
+            <div class="lesson-icon">📚</div>
+            <div>
+              <div class="lesson-name">Tutor Lesson</div>
+              <div class="lesson-meta">"Daily routine" · 10 min</div>
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-icon">💬</div>
+            <div>
+              <div class="lesson-name">Speaking Drill</div>
+              <div class="lesson-meta">跟读 8 个句子</div>
+            </div>
+          </div>
+          <div class="lesson-item live">
+            <div class="lesson-icon">🎙️</div>
+            <div>
+              <div class="lesson-name">Live Roleplay</div>
+              <div class="lesson-meta">"在咖啡店点单" · 3-5 min</div>
+            </div>
+            <div class="lesson-tag">PREMIUM</div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-icon">📖</div>
+            <div>
+              <div class="lesson-name">Vocab Builder</div>
+              <div class="lesson-meta">12 个新词</div>
+            </div>
+          </div>
+          <div class="lesson-item">
+            <div class="lesson-icon">🗣️</div>
+            <div>
+              <div class="lesson-name">Free Talk</div>
+              <div class="lesson-meta">自由对话</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-caption">
+      <h3 style="margin-top:0;">看到了什么</h3>
+      <ul>
+        <li><strong>没有 streak 火苗</strong> — Speak 不学 Duolingo 的"上瘾"打卡机制</li>
+        <li>课程模式 7 种 — 但只有 2 种（Roleplay + Live Roleplay）撑起了它过去 18 个月的全部增长</li>
+        <li><strong>🎙️ Live Roleplay</strong> 是 Speak 最值钱的功能 — Premium 独占，2024-10 上线</li>
+        <li>每节课 3-15 分钟，主打"通勤碎片化"，韩国上班族最爱</li>
+      </ul>
+      <p class="small">▶ Speak 的核心 OS = <strong>逼你说出来</strong>，所以每节课最后都要你录音、答题、对话。打字不算数。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ② Live Roleplay -->
+<div class="section">
+  <h2>② Live Roleplay 是什么 · Speak 真正的核心</h2>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-status" style="color:white;background:#1f2937;height:30px;"><span>9:41</span><span>📶 ⚡ 100%</span></div>
+      <div class="phone-screen" style="padding:0;">
+        <div class="live-screen">
+          <div class="live-top">
+            <span>🎙️ Live Roleplay</span>
+            <span>● REC 01:23</span>
+          </div>
+          <div class="live-mid">
+            <div class="live-avatar">☕</div>
+            <div class="live-name">Barista (Alex)</div>
+            <div class="live-task">
+              <div class="lab">任务 1/3</div>
+              点一杯咖啡，问价格
+            </div>
+            <div class="live-bubble">"Hi, what can I get for you today?"<br><span style="color:#9ca3af;font-size:9px;">(你今天想要点什么?)</span></div>
+          </div>
+          <div class="live-controls">
+            <div class="lc-btn">🎤</div>
+            <div class="lc-btn">📝</div>
+            <div class="lc-btn end">📞</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-caption">
+      <h3 style="margin-top:0;">用起来什么感觉</h3>
+      <p><strong>1. 选场景</strong>：你点"在咖啡店点单"</p>
+      <p><strong>2. AI 给 3 个任务</strong>：① 点咖啡 ② 问价格 ③ 选打包还是堂食</p>
+      <p><strong>3. 直接语音对话</strong>：你按住麦克风说英语，AI 用咖啡店员（Alex）的声音回你</p>
+      <p><strong>4. 完成 3 个任务自然结束</strong>：AI 给你 1-2 句话错误总结 + 推送一节复习课</p>
+      <p class="small">⚡ 关键体感：<strong>AI 反应快 — 200 毫秒级延迟</strong>，几乎像和真人打电话。这是它和 Duolingo Max Video Call 最大的区别（Duolingo 1-2 秒延迟，用户吐槽 Lily "呆")。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ③ 速度对比 -->
+<div class="section">
+  <h2>③ 为什么 Speak 反应快、Duolingo 反应慢 — 接力赛 vs 直传</h2>
+  <p>这是 P2 主拆解里最关键的技术差异。用一个简单的类比就懂：</p>
+
+  <div class="race-grid">
+
+    <div class="race slow">
+      <div class="race-title">🐌 Duolingo Max · 接力赛（4 棒）</div>
+      <div class="runners">
+        <div class="runner">
+          <div class="icon">🎤</div>
+          <div class="name">你说话</div>
+        </div>
+        <div class="race-arrow">→</div>
+        <div class="runner">
+          <div class="icon">📝</div>
+          <div class="name">速记员</div>
+          <div class="role">写成文字</div>
+        </div>
+        <div class="race-arrow">→</div>
+        <div class="runner">
+          <div class="icon">🤖</div>
+          <div class="name">翻译员</div>
+          <div class="role">GPT-4 想答案</div>
+        </div>
+        <div class="race-arrow">→</div>
+        <div class="runner">
+          <div class="icon">🔊</div>
+          <div class="name">朗读员</div>
+          <div class="role">把字读出来</div>
+        </div>
+      </div>
+      <div class="race-result">
+        4 个人接力 → 每个人交接都要时间
+        <div class="race-time" style="margin-top:8px;">1.5 - 2 秒</div>
+        <div class="race-time-lab">用户体感：AI 像呆呆的</div>
+      </div>
+    </div>
+
+    <div class="race fast">
+      <div class="race-title">⚡ Speak Live Roleplay · 直传（1 棒）</div>
+      <div class="runners">
+        <div class="runner">
+          <div class="icon">🎤</div>
+          <div class="name">你说话</div>
+        </div>
+        <div class="race-arrow">→</div>
+        <div class="runner">
+          <div class="icon">🧠</div>
+          <div class="name">GPT-4o</div>
+          <div class="role">听到 = 想答案 = 直接说</div>
+        </div>
+        <div class="race-arrow">→</div>
+        <div class="runner">
+          <div class="icon">🔊</div>
+          <div class="name">AI 回你</div>
+        </div>
+      </div>
+      <div class="race-result">
+        1 个人搞定 → 没有中间交接
+        <div class="race-time" style="margin-top:8px;">200 毫秒</div>
+        <div class="race-time-lab">用户体感：像真人对话</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout-tip">
+    <div class="lab">💡 一句话总结技术差异</div>
+    <strong>Speak 是 "speech-to-speech"（语音直传语音）</strong>，技术上叫 <strong>OpenAI Realtime API</strong>，2024 年 10 月才推出。Speak 是第一批切到这个 API 的产品，OpenAI 官方把它列为 case study。Duolingo Max 还没切，所以 Lily 反应慢、感觉像呆呆的。
+  </div>
+</div>
+
+<!-- ④ ASR 是什么 -->
+<div class="section">
+  <h2>④ "自研 ASR" 是什么 · 用"耳朵"来类比</h2>
+  <p><strong>ASR = Automatic Speech Recognition</strong>（自动语音识别）= 让 AI 把你说的话变成文字。可以理解为 AI 的"耳朵"。</p>
+  <p>Speak 没有用 OpenAI 现成的 ASR（叫 Whisper），而是<strong>自己训了一对耳朵</strong>，用自家用户的录音 fine-tune。</p>
+
+  <div class="ear-compare">
+
+    <div class="ear">
+      <div class="ear-icon">👂</div>
+      <div class="ear-name">Apple Speech</div>
+      <div class="ear-from">系统自带 · 第三方</div>
+      <div class="ear-score">WER 基准</div>
+    </div>
+
+    <div class="ear">
+      <div class="ear-icon">👂</div>
+      <div class="ear-name">Azure Speech</div>
+      <div class="ear-from">微软 · 第三方</div>
+      <div class="ear-score">WER 基准</div>
+    </div>
+
+    <div class="ear win">
+      <div class="ear-icon">🦻✨</div>
+      <div class="ear-name">Speak 自研</div>
+      <div class="ear-from">Conformer-CTC · 自家数据训的</div>
+      <div class="ear-score">WER 降 60%+（自报）</div>
+    </div>
+
+  </div>
+
+  <p class="small"><strong>WER = Word Error Rate（识别错误率）</strong>，越低越好。Speak 在它技术博客里写自家 ASR 比 Apple / Azure 强 — 这是它自报数据，没有第三方验证，但说明它在 STT 这一层是<strong>认真投入的</strong>。</p>
+
+  <div class="callout-tip">
+    <div class="lab">💡 这对你 Flashcard 升级的启发</div>
+    如果你 Flashcard 加语音识别，<strong>OpenAI Whisper API 是公平起点</strong>（直接调，省事），但 Speak 证明<strong>自己 fine-tune 一对"雅思耳朵"</strong>（用雅思考生录音训）能甩开第三方 40-60% 的 WER。这是 Speak 没做的事——它 ASR 是通用的，没有专门为雅思口语优化。
+  </div>
+</div>
+
+<!-- ⑤ 间隔重复 -->
+<div class="section">
+  <h2>⑤ "间隔重复"是什么 · 你 Flashcard 工具的核心机制</h2>
+  <p><strong>Spaced Repetition = 间隔重复</strong>。简单说：<strong>越熟的词，复习间隔越长；越生的词，复习间隔越短</strong>。这是 Flashcard / Anki / Quizlet 等记忆类工具的核心算法，基于德国心理学家 Ebbinghaus 的<strong>遗忘曲线</strong>。</p>
+
+  <div class="sr-chart">
+    <p style="margin-top:0;font-weight:700;font-size:14px;">学一个新词后的复习节奏（越往后越稀疏）：</p>
+    <div class="sr-timeline">
+      <div class="sr-day">
+        <div class="sr-bar d1">100%</div>
+        <div class="sr-when">第 1 天</div>
+        <div class="sr-label">第一次学</div>
+      </div>
+      <div class="sr-day">
+        <div class="sr-bar d3">85%</div>
+        <div class="sr-when">第 3 天</div>
+        <div class="sr-label">第 1 次复习</div>
+      </div>
+      <div class="sr-day">
+        <div class="sr-bar d7">70%</div>
+        <div class="sr-when">第 7 天</div>
+        <div class="sr-label">第 2 次复习</div>
+      </div>
+      <div class="sr-day">
+        <div class="sr-bar d14">60%</div>
+        <div class="sr-when">第 14 天</div>
+        <div class="sr-label">第 3 次复习</div>
+      </div>
+      <div class="sr-day">
+        <div class="sr-bar d30">55%</div>
+        <div class="sr-when">第 30 天</div>
+        <div class="sr-label">长期记忆</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:8px;">柱子高度 = 复习频次。<strong>越后面越少复习，记得越牢</strong>。</p>
+  </div>
+
+  <div class="callout-tip">
+    <div class="lab">💡 这是 Speak 没做的事 — 你的护城河</div>
+    Speak 的 Phrasebook 只是<strong>单向存档</strong>（你存进去就完了），<strong>不会主动把这些词重新塞进对话里让你练</strong>。Languatalk 评测原话："Phrasebook is a one-way storage." 你的 Flashcard 工具天然就是 spaced repetition 设计的——<strong>这是 $1B 估值的 Speak 都没做的功能</strong>，是你的明确产品差异化空间。
+  </div>
+</div>
+
+<!-- ⑥ 雅思类比 -->
+<div class="section">
+  <h2>⑥ 用你熟悉的雅思场景做类比</h2>
+  <p>把 Speak 的 4 个核心功能 + 1 个技术决策，翻译成雅思场景：</p>
+
+  <div class="analogy">
+    <table>
+      <tr>
+        <th width="22%">Speak 的</th>
+        <th width="38%">用起来什么感觉</th>
+        <th width="40%">搬到雅思场景</th>
+      </tr>
+      <tr>
+        <td><strong>Roleplay</strong></td>
+        <td>选场景（点咖啡），AI 给 3 个 task，文字 + 语音混合对话</td>
+        <td>选 Part 2 题卡（Describe a memorable trip），AI 给 4 个 bullet point，模拟考官打字对话</td>
+      </tr>
+      <tr>
+        <td><strong>Live Roleplay</strong></td>
+        <td>纯语音 + Realtime API + 200ms 延迟，AI 像真人</td>
+        <td>AI 雅思考官 Part 1/3 视频面试模拟，按真实考试节奏</td>
+      </tr>
+      <tr>
+        <td><strong>Free Talk</strong></td>
+        <td>用户自定话题，开放对话，AI 反问</td>
+        <td>Part 3 深度追问练习（AI 扮考官，用户准备 follow-up 问题）</td>
+      </tr>
+      <tr>
+        <td><strong>Phrasebook</strong></td>
+        <td>词存档，单向，不主动复用</td>
+        <td>❌ <strong>你 Flashcard 工具直接做反向 — 错题 / 词汇主动塞进下次对话</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Realtime API</strong></td>
+        <td>speech-to-speech 端到端</td>
+        <td>E3 升级方向的<strong>第一技术决策</strong>，从第一天就用这个，不要做三段式</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="callout-tip">
+    <div class="lab">💡 给你 Flashcard 工具升级方向的 3 句话总结</div>
+    <strong>① 技术上抄 Speak</strong>（用 Realtime API）<strong>② 反馈机制反着做</strong>（Speak 弱的地方做深）<strong>③ 雅思针对性</strong>（Speak 没做的，你做）。
+  </div>
+</div>
+
+<!-- ⑦ 术语小词典 -->
+<div class="section">
+  <h2>⑦ 看完后回去看 P2 主文 · 关键术语小词典</h2>
+  <div class="glossary">
+    <dl>
+      <dt>Speak / speak.com</dt>
+      <dd>OpenAI 投资的 AI 口语学习 App，2016 创立，2024-12 估值 $1B（独角兽）。主战场韩国 / 日本，韩国 App Store 教育类 #1。</dd>
+
+      <dt>Connor Zwick</dt>
+      <dd>Speak 创始人 + CEO，Thiel Fellowship "20 Under 20" 出身。</dd>
+
+      <dt>Live Roleplay</dt>
+      <dd>Speak 的核心 AI 功能，2024-10 上线。用 OpenAI Realtime API + GPT-4o 做端到端语音对话。</dd>
+
+      <dt>Realtime API</dt>
+      <dd>OpenAI 2024-10 推出的接口，让 AI 直接"听到说"不用中转文字。<strong>P1 推测 Duolingo Max 没切的就是这个</strong>。Speak 是第一批切的产品。</dd>
+
+      <dt>Speech-to-Speech / 端到端</dt>
+      <dd>语音输入直接生成语音输出，不经过文字中转。延迟可低至 200ms（接近真人对话）。</dd>
+
+      <dt>STT → LLM → TTS</dt>
+      <dd>三段式语音管道：Speech-to-Text → 大模型 → Text-to-Speech。延迟 1-2 秒，丢失语调情感。Duolingo Max Video Call 用的就是这个（推测）。</dd>
+
+      <dt>ASR / Automatic Speech Recognition</dt>
+      <dd>自动语音识别，把你说的话变文字。可以理解为 AI 的"耳朵"。Speak 自己训了一对（Conformer-CTC 架构）。</dd>
+
+      <dt>Conformer-CTC</dt>
+      <dd>一种 ASR 模型架构，自注意力 + 卷积结合。Speak 用 Nvidia NeMo framework 自己训的。</dd>
+
+      <dt>WER / Word Error Rate</dt>
+      <dd>识别错误率。Speak 自报 WER 比 Apple Speech / Azure Speech 好 — 但没有第三方验证。</dd>
+
+      <dt>Spaced Repetition / 间隔重复</dt>
+      <dd>记忆科学的核心算法，越熟越间隔越长。<strong>Speak 没做这个，你 Flashcard 工具天然就有，这是你的护城河</strong>。</dd>
+
+      <dt>ARR / Annual Recurring Revenue</dt>
+      <dd>年度经常性收入（订阅类业务的核心指标）。Speak 一年从 $50M → $100M+。</dd>
+
+      <dt>Speak for Business</dt>
+      <dd>Speak 的 B 端产品，2024 启动，2 年做到 500+ 企业（KPMG / Hyundai），员工 adoption 85%。<strong>P2 的核心战略洞察 — B 端市场已被验证</strong>。</dd>
+    </dl>
+  </div>
+</div>
+
+<!-- ⑧ 现在你可以做的 -->
+<div class="section">
+  <h2>⑧ 现在你可以做的（可选 5-10 分钟）</h2>
+  <ol>
+    <li><strong>App Store 搜 "Speak" 下载</strong>，免费版玩 5 分钟英语初级课，亲身感受 Speaking Drill / Roleplay 的强制开口设计</li>
+    <li><strong>付不付费 Premium 都行</strong> — 你需要的体感是"Speak 怎么逼你开口"，不需要真用 Live Roleplay（那是 Premium 独占，$20/月）</li>
+    <li>回去看 <strong>P2-speak-v1.html</strong> 主拆解 — 现在 "Realtime API / ASR / spaced repetition / 反馈机制弱点" 你都能对应到具体功能了</li>
+  </ol>
+
+  <div class="callout-tip">
+    <div class="lab">📌 为什么建议亲手玩 5 分钟</div>
+    Speak 这家公司最值钱的 OS = <strong>强制开口</strong>。你不用一次，永远理解不了为什么 5-10 倍 speaking 时长能让用户付 $20/月。面试官如果问"为什么 Speak 能做到独角兽"，你能讲"我亲身用过，它的 onboarding 第一句话就让你说英语，连 ChatGPT Voice 都做不到这种强制感"——这比纯讲数据强 5 倍。
+  </div>
+</div>
+
+<div class="small" style="text-align:center;margin-top:24px;">
+  P2 配套科普 · Speak 是什么 · 小白版 ｜ 2026-05-24<br>
+  配合 <strong>P2-speak-v1.html</strong> 主拆解一起看 ｜ 上一篇 <strong>P1-duolingo-101.html</strong> 同款风格
+</div>
+
+</body>
+</html>

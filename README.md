@@ -15,7 +15,8 @@
 - [x] **T1** · 雅思口语 Part 2 题卡 AI 批量生成（飞书 Bitable + 4 段 prompt 链）→ `skills/T1-feishu-base-ielts/`
 - [ ] T2-T5（W2-W5）
 - [x] **P1** · 多邻国 Max（Duolingo Max）深度拆解 — 战略变阵 / AI 架构 / 移植雅思 5 路径 → `analysis/P1-duolingo-max/`
-- [ ] P2-P10（W2-W10）
+- [x] **P2** · Speak (speak.com) 深度拆解 — Realtime API 是分水岭 / $1B 独角兽 / 移植雅思 5 路径 → `analysis/P2-speak/`
+- [ ] P3-P10（W3-W10）
 - [ ] E1-E5（W5-W16）
 
 ## 关于作者
