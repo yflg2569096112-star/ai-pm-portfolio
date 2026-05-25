@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 Prompt v2 · 3 个字段升级</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 28px 22px 80px;
+    color: #1f2937;
+    line-height: 1.65;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 22px; }
+
+  .hero {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: white;
+    padding: 22px 26px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .hero h2 { color: white; border: 0; padding: 0; margin: 0 0 10px; font-size: 19px; }
+  .hero .fix-list { background: rgba(255,255,255,0.13); padding: 12px 16px; border-radius: 8px; margin-top: 10px; }
+  .hero .fix-list li { margin: 5px 0; font-size: 14px; }
+
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 19px;
+    margin: 0 0 14px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 16px 0 8px;
+    color: #1e40af;
+  }
+
+  .skip {
+    background: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: #065f46;
+    margin: 10px 0;
+  }
+
+  .step-card {
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .step-num {
+    display: inline-flex;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #f59e0b;
+    color: white;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title { font-size: 16px; font-weight: 700; flex: 1; min-width: 200px; }
+  .step-fixes {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .fix-badge {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .path {
+    background: #eff6ff;
+    border-left: 3px solid #3b82f6;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    margin: 8px 0;
+    color: #1e40af;
+  }
+  .path code {
+    background: #dbeafe;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .copy-box {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+    font-family: ui-monospace, "SF Mono", "Monaco", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 2px solid #1e293b;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  .copy-box::before {
+    content: "复制下面整段 ⬇";
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: #fbbf24;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+
+  .diff-tag {
+    background: #fef2f2;
+    color: #991b1b;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+  .new-tag {
+    background: #dcfce7;
+    color: #166534;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+
+  .verify {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+
+  .final {
+    background: #1e293b;
+    color: white;
+    padding: 24px 28px;
+    border-radius: 14px;
+    margin-top: 20px;
+  }
+  .final h2 { color: white; border-left-color: #fbbf24; margin: 0 0 12px; }
+  .final code {
+    background: rgba(251,191,36,0.25);
+    color: #fde68a;
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 Prompt v2 升级</h1>
+<div class="subtitle">2026-05-23 周六 · 针对 v1 跑出来的 3 类问题做 prompt 加固，更新 3 个字段</div>
+
+<div class="hero">
+  <h2>v2 修了什么</h2>
+  <div class="fix-list">
+    <ol style="margin: 0; padding-left: 18px;">
+      <li><strong>范文长度失控</strong>（4/5 行超 220 词）→ 加硬约束 + 字数自查指令</li>
+      <li><strong>范文出现中文字符"观察"</strong>（Row 2）→ 明确禁止任何中文字符</li>
+      <li><strong>错误库重复</strong>（effect/affect 跨行复用 3 次）→ 强制话题特异性 + 禁通用错误</li>
+      <li><strong>评分要点格式塌陷</strong>（Row 4 无换行）→ 显式要求段落间空行</li>
+    </ol>
+  </div>
+</div>
+
+<div class="section">
+  <h2>需要更新的字段（3 个）</h2>
+
+  <div class="skip">
+    <strong>字段 2「题卡」不动</strong> —— v1 已经 5/5 全通过，prompt 没问题。
+  </div>
+
+  <p style="font-size: 14px; color: #4b5563; margin: 10px 0;">
+    下面 3 个字段，逐个点列头 → <strong>编辑字段</strong> → 找到「自定义要求」框 → <strong>全选 (Cmd+A) 旧 prompt → 删除 → 粘贴下面新版</strong>。
+  </p>
+</div>
+
+<!-- Field 3 · 评分要点 -->
+<div class="section">
+  <h3>字段 3「评分要点」v2 <span class="new-tag">+ 段落分隔约束</span></h3>
+
+  <div class="path">飞书操作路径：列头「评分要点」→ <code>编辑字段</code> → 「自定义要求」框 → 全清 → 粘贴下面</div>
+
+  <div class="copy-box">你是雅思口语考官，根据下面的话题和题卡，输出 4 维评分要点。
+
+**输出格式（严格遵守，每段之间必须有一个空行）**：
+
+【FC 流利与连贯】
+[这道题考察的连贯性要点 + 推荐的 3-5 个时序/逻辑衔接词，50-80 字]
+
+【LR 词汇资源】
+[8 个该话题必备的 band 7.5+ 词汇或固定搭配，用逗号分隔]
+
+【GRA 语法范围与准确性】
+[该话题适合展示的 2-3 种语法结构，如 past perfect / conditional / cleft sentence / relative clauses，每个配一个示例]
+
+【P 发音】
+[2-3 个学生容易读错的关键单词及音标]
+
+**硬约束**：
+- 4 个段落标题【FC...】【LR...】【GRA...】【P...】必须各自独立成行
+- 段落之间必须空一行隔开（不要挤在一起）
+- LR 词汇必须 band 7.5+ 级别，禁用 'beautiful' / 'important' / 'good' / 'very useful' / 'nice' 这种基础词
+- 8 个词汇必须紧扣该话题语义，不要泛用词
+- 不要输出解释性套话
+- 不要追加总结
+- 100% 英文（中英文标签【】内部除外）</div>
+</div>
+
+<!-- Field 4 · 范文 -->
+<div class="section">
+  <h3>字段 4「范文」v2 <span class="diff-tag">硬字数约束</span><span class="diff-tag">禁中文</span><span class="new-tag">+ 自查指令</span></h3>
+
+  <div class="path">飞书操作路径：列头「范文」→ <code>编辑字段</code> → 「自定义要求」框 → 全清 → 粘贴下面</div>
+
+  <div class="copy-box">你是 BC 认证雅思考官，根据话题和题卡，写一篇 7.5-8.0 band 的 Part 2 范文。
+
+**输出格式（严格遵守）**：
+
+【范文】
+[严格 180-220 词的范文]
+
+【高分词汇】
+[范文中用到的 5-8 个 band 7.5+ 词汇或固定搭配，逗号分隔]
+
+【衔接手段】
+[范文中用到的 4-6 个连接词或衔接短语，逗号分隔]
+
+【预估 band】
+[7.5 / 8.0 / 8.5 三选一]
+
+**硬约束（违反 = 输出不合格，必须重写）**：
+
+1. **字数硬约束**：范文必须 180-220 词。写完后请数一遍（按英文单词数）。如果超过 220，删减冗余信息保留 4 bullet 核心；如果少于 180，补充细节。**严禁超过 230 词**。
+
+2. **100% 英文**：范文中**禁止任何中文字符**（包括中文标点）。如果你想用中文词，请改成英文同义词。这是硬性合规要求。
+
+3. **必须覆盖题卡 4 个 bullet**：这是 Part 2 评分硬指标。
+
+4. **必须包含至少 1 处自然口语化特征**：filler words（well / you know / I mean）、轻微自我修正（or rather…）、或个人化细节。但不要每句都用，2-3 处即可。
+
+5. **不要追求 9.0 完美**：9.0 范文会显出 AI 生成痕迹（用词过于学术、句式过于复杂、无任何冗余）。允许 1-2 处自然停顿/口语松弛。
+
+6. **不要用书面化套句**：'In conclusion' / 'To sum up' / 'All in all' 等——Part 2 是口述，不是议论文。
+
+7. **不要追加中文翻译**。
+
+**写完前自查清单**：
+- [ ] 数过词数，在 180-220 之间？
+- [ ] 没有任何中文字符？
+- [ ] 4 个 bullet 都覆盖到？
+- [ ] 有 2-3 处自然口语化特征？
+
+全部 yes 才输出。</div>
+</div>
+
+<!-- Field 5 · 常见错误 -->
+<div class="section">
+  <h3>字段 5「常见错误」v2 <span class="diff-tag">话题特异性</span><span class="diff-tag">禁通用错</span></h3>
+
+  <div class="path">飞书操作路径：列头「常见错误」→ <code>编辑字段</code> → 「自定义要求」框 → 全清 → 粘贴下面</div>
+
+  <div class="copy-box">你是雅思口语教研老师，专精错误诊断。
+
+根据话题，输出该话题下中国学生在 Part 2 答题时**最常犯的 5 个错误**。
+
+**输出格式（严格遵守）**：
+
+1. 错误：[具体描述，必须明确到语法点或词汇点]
+   修正：[怎么改，给出正确表达]
+
+2. 错误：...
+   修正：...
+
+3. 错误：...
+   修正：...
+
+4. 错误：...
+   修正：...
+
+5. 错误：...
+   修正：...
+
+**硬约束（违反 = 输出不合格）**：
+
+1. **话题特异性原则**：5 条错误必须是**该话题特有**的中国学生易错点。绝对禁止以下"通用错误"——它们在任何话题都成立，写出来等于没分析：
+   - ❌ "用 effect 当动词代替 affect"
+   - ❌ "漏掉第 4 个 bullet 'how you feel about it'"
+   - ❌ "用 let me tell you 作为口语开场"
+   - ❌ "比较级缺少 the / -er 误用"
+   - ❌ 任何不依赖话题语义就能写出的错误
+
+2. **必须围绕话题语义/词汇/搭配特点**设计错误。例如：
+   - 「科技」话题应该围绕科技产品动词搭配（develop/launch/upgrade）、抽象名词（functionality/usability）
+   - 「老师」话题应该围绕描述人的形容词（inspiring/strict）、师生关系动词（mentor/encourage）
+   - 「旅行」话题应该围绕 trip/travel/journey 词性区别、go to vs visit
+   - 「技能」话题应该围绕 learn vs study、master vs acquire、动名词搭配
+   - 「书」话题应该围绕 read vs study、book genre 词汇（novel/biography/memoir）
+
+3. **每条错误必须配具体 fix**（不只是诊断，要给学员能直接用的正确表达）。
+
+4. **每条必须明确到具体词汇/语法点**：
+   - ❌ 笼统："学生时态用得不对"
+   - ✓ 具体："描述读书习惯时学生用 present continuous（I am reading it every night），应该用 present simple"
+
+5. 不要追加总结或建议。</div>
+</div>
+
+<!-- 重跑步骤 -->
+<div class="section">
+  <h2>更新完 3 个字段后</h2>
+
+  <ol style="font-size: 14px; padding-left: 22px;">
+    <li>飞书会自动重新生成（不需要手动触发，AI 字段是响应式的）</li>
+    <li>等 5-10 分钟，5 行 × 3 字段 = 15 个单元格更新</li>
+    <li>题卡那一列不会动（你没改 prompt）</li>
+  </ol>
+
+  <div class="verify">
+    <strong>v2 跑完后看 4 个验证点</strong>：
+    <ol style="margin: 6px 0; padding-left: 22px;">
+      <li>5 行范文是不是都在 180-220 词内？（数一行看一行）</li>
+      <li>5 行范文里还有中文字符吗？</li>
+      <li>5 行常见错误是不是都"贴着话题"而不是通用错？（如"老师"话题不该出现 affect/effect 那种）</li>
+      <li>评分要点 Row 4 现在 4 段有空行隔开了吗？</li>
+    </ol>
+  </div>
+</div>
+
+<div class="final">
+  <h2>v2 跑完后回我</h2>
+  <p style="font-size: 15px; margin: 8px 0;">
+    告诉我 4 个验证点的结果：
+  </p>
+  <p style="font-size: 15px;">
+    <code>v2 跑完，4 项都过 → 收尾归档</code><br>
+    或：<code>v2 还有 X 问题：[简述]</code>
+  </p>
+  <p style="margin-top: 14px; font-size: 13px; opacity: 0.85;">
+    最多再迭代一轮 v3，不行就锁定问题进 T1 复盘，进 T2。
+  </p>
+</div>
+
+</body>
+</html>

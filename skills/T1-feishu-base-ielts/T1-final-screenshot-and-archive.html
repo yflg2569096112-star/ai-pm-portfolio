@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 最后一张截图 + 归档</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 22px 80px;
+    color: #1f2937;
+    line-height: 1.65;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 22px; }
+
+  .hero {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: white;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+  }
+  .hero h2 { color: white; border: 0; padding: 0; margin: 0 0 8px; font-size: 20px; }
+  .hero p { margin: 6px 0; font-size: 14px; opacity: 0.95; }
+
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 19px;
+    margin: 0 0 14px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    margin: 14px 0;
+    padding: 16px 18px;
+    background: #fafafa;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .step-body { flex: 1; }
+  .step-body strong { color: #1e40af; }
+  .step-body .detail {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #4b5563;
+  }
+  .key {
+    display: inline-block;
+    background: #1e293b;
+    color: white;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    margin: 0 2px;
+  }
+
+  .visual-ref {
+    background: #eff6ff;
+    border: 2px dashed #3b82f6;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 14px 0;
+  }
+  .visual-ref-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .panel-mock {
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #2563eb;
+    padding: 14px;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+    position: relative;
+  }
+  .panel-mock::before {
+    content: "← 你现在看到的面板";
+    position: absolute;
+    top: -14px;
+    right: 10px;
+    background: #2563eb;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .panel-row {
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed #e5e7eb;
+  }
+  .panel-row .label { color: #6b7280; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .panel-row .val { color: #1f2937; font-weight: 500; }
+  .panel-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+  }
+  .btn-cancel {
+    background: #f3f4f6;
+    border: 1px solid #d1d5db;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #4b5563;
+  }
+  .btn-confirm {
+    background: #2563eb;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px solid #2563eb;
+  }
+  .crosshair {
+    border: 3px dashed #ef4444;
+    border-radius: 8px;
+    margin: 14px 0;
+    padding: 12px;
+    font-size: 13px;
+    color: #991b1b;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .copy-box {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 10px 0;
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .copy-box::before {
+    content: "复制到终端跑 ⬇";
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: #fbbf24;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+
+  .file-list {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+    border: 1px solid #e5e7eb;
+  }
+  .file-list .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed #e5e7eb;
+  }
+  .file-list .item:last-child { border-bottom: 0; }
+  .file-list .name {
+    font-family: ui-monospace, monospace;
+    color: #1e40af;
+  }
+  .file-list .desc { color: #6b7280; }
+
+  .after {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    margin: 10px 0;
+  }
+  .after ol { margin: 8px 0; padding-left: 22px; }
+
+  .final {
+    background: #1e293b;
+    color: white;
+    padding: 24px 28px;
+    border-radius: 14px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .final h2 { color: white; border: 0; padding: 0; margin: 0 0 8px; }
+  .final code {
+    background: rgba(251,191,36,0.25);
+    color: #fde68a;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 最后一张截图 + 归档</h1>
+<div class="subtitle">2026-05-23 周六 · 你现在已经打开了"Edit Field"面板，30 秒收尾</div>
+
+<div class="hero">
+  <h2>你现在在哪一步</h2>
+  <p>✓ 你已经右键列头 → 点了 Edit Field</p>
+  <p>✓ 右侧弹出了配置面板，能看见「评分要点」+ Custom AI Autofill + Enter prompt 的内容</p>
+  <p><strong>← 你现在要做的：把这个面板截下来</strong></p>
+</div>
+
+<!-- 截图步骤 -->
+<div class="section">
+  <h2>截这张图（3 步，30 秒）</h2>
+
+  <div class="visual-ref">
+    <div class="visual-ref-title">你要框选的目标</div>
+    <div class="panel-mock">
+      <div class="panel-row">
+        <span class="label">字段名</span><br>
+        <span class="val">评分要点</span>
+      </div>
+      <div class="panel-row">
+        <span class="label">Field type</span><br>
+        <span class="val">Custom AI Autofill (Field shortcut)</span>
+      </div>
+      <div class="panel-row">
+        <span class="label">Enter prompt</span><br>
+        <span class="val" style="font-size: 11px; color: #4b5563;">你是雅思口语考官，根据下面的话题和题卡，输出 4 维评分要点......（一大段 prompt 文字）</span>
+      </div>
+      <div class="panel-buttons">
+        <span class="btn-cancel">Cancel</span>
+        <span class="btn-confirm">Confirm</span>
+      </div>
+    </div>
+    <div class="crosshair">
+      ⬆ 框选范围：从面板顶部「评分要点」到底部 Confirm 按钮，整个右侧面板
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">1</span>
+    <div class="step-body">
+      <strong>按 <span class="key">Cmd</span> + <span class="key">Shift</span> + <span class="key">4</span></strong>
+      <div class="detail">鼠标变成十字准星</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">2</span>
+    <div class="step-body">
+      <strong>拖拽框选整个配置面板</strong>（上图蓝框那一大块）
+      <div class="detail">从「评分要点」字段名开始，拖到 Confirm 按钮结束。框得宽一点没关系，宁多勿少。</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="step-num">3</span>
+    <div class="step-body">
+      <strong>松手 → 截图自动存桌面</strong>
+      <div class="detail">桌面会多出一张 <code>截屏 2026-05-24 XX:XX.png</code></div>
+    </div>
+  </div>
+
+  <div class="step" style="background: #fef2f2; border-color: #fca5a5;">
+    <span class="step-num" style="background: #ef4444;">!</span>
+    <div class="step-body">
+      <strong style="color: #991b1b;">截完后点 Cancel，不要点 Confirm</strong>
+      <div class="detail">你只是看 prompt 不是改它，点 Cancel 关闭即可。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 归档步骤 -->
+<div class="section">
+  <h2>4 张图归档（1 行命令搞定）</h2>
+
+  <p style="font-size: 14px;">桌面上现在应该有 <strong>4 张截图</strong>（前 3 张早就截了，第 4 张刚截）。</p>
+
+  <div class="file-list">
+    <div class="item">
+      <span class="name">桌面上的 4 张 截屏-XX.png</span>
+      <span class="desc">按截图时间排序，最旧→最新</span>
+    </div>
+  </div>
+
+  <h3 style="font-size: 15px; margin: 14px 0 8px;">推荐：手动拖 + 改名（最稳）</h3>
+
+  <p style="font-size: 14px;">
+    1. 在 Finder 打开桌面<br>
+    2. 选中 4 张截图<br>
+    3. 拖到这个文件夹（在 Finder 里按 <span class="key">Cmd</span>+<span class="key">Shift</span>+<span class="key">G</span> 粘贴下面路径）：
+  </p>
+
+  <div class="copy-box">/Users/jackyan/Documents/NC Innovation Project/context/project_D_ai_pm_transition/01_execution_16weeks/T1-staging/screenshots/</div>
+
+  <p style="font-size: 14px;">4. 在新位置依次重命名为：</p>
+
+  <div class="file-list">
+    <div class="item">
+      <span class="name">feishu-base-overview.png</span>
+      <span class="desc">全表 + 顶部「新航道」面包屑</span>
+    </div>
+    <div class="item">
+      <span class="name">feishu-ai-field-config.png</span>
+      <span class="desc">prompt 配置面板（刚截这张）</span>
+    </div>
+    <div class="item">
+      <span class="name">feishu-output-detail-essay.png</span>
+      <span class="desc">范文展开</span>
+    </div>
+    <div class="item">
+      <span class="name">feishu-output-detail-errors.png</span>
+      <span class="desc">常见错误展开</span>
+    </div>
+  </div>
+
+  <h3 style="font-size: 15px; margin: 18px 0 8px;">备选：终端 1 行命令（自动按时间排序）</h3>
+
+  <div class="copy-box">cd ~/Desktop && i=0 && for f in $(ls -t 截屏*.png 2>/dev/null | head -4 | tac); do
+  i=$((i+1))
+  case $i in
+    1) name="feishu-output-detail-errors.png" ;;
+    2) name="feishu-output-detail-essay.png" ;;
+    3) name="feishu-base-overview.png" ;;
+    4) name="feishu-ai-field-config.png" ;;
+  esac
+  mv "$f" "/Users/jackyan/Documents/NC Innovation Project/context/project_D_ai_pm_transition/01_execution_16weeks/T1-staging/screenshots/$name"
+  echo "moved $f -> $name"
+done</div>
+
+  <p style="font-size: 12px; color: #6b7280;">
+    ⚠️ 此命令假设你的 4 张截图<strong>按这个顺序</strong>截的（旧→新）：常见错误 → 范文 → 全表 → 配置面板。如果顺序不一样，手动拖更安全。
+  </p>
+</div>
+
+<!-- 完工后 -->
+<div class="section">
+  <h2>归档完成后我帮你做什么</h2>
+
+  <div class="after">
+    <ol>
+      <li><strong>起草 README 的"学到了什么"段</strong>——结合 v1→v2 prompt 迭代经验，写 200 字左右复盘。你只需要审一下，不需要从头写。</li>
+      <li><strong>把这次 T1 流程写进 SESSION_LOG</strong>——记录 v1 跑出的 4 类问题 + v2 修复方向，是面试讲故事的核心素材。</li>
+      <li><strong>决定 GitHub push 时机</strong>——今晚有空就 push（要装 gh CLI + 建 monorepo），没空就先存本地，等 P1 拆解完一起推。</li>
+    </ol>
+  </div>
+</div>
+
+<div class="final">
+  <h2>截完 + 归档后回我</h2>
+  <p style="font-size: 16px; margin: 12px 0;">
+    <code>4 张图都好了</code>
+  </p>
+  <p style="font-size: 14px; opacity: 0.85; margin-top: 12px;">
+    我接管后续 3 件事，T1 今晚就能完工。
+  </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 一键搭建 · 给飞书 AI 助手的提示词</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 22px 80px;
+    color: #1f2937;
+    line-height: 1.65;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 22px; }
+
+  .hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+    color: white;
+    padding: 22px 26px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .hero h2 { color: white; border: 0; padding: 0; margin: 0 0 8px; font-size: 19px; }
+  .hero p { margin: 6px 0; font-size: 14px; opacity: 0.92; }
+
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 19px;
+    margin: 0 0 14px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+
+  .steps-quick {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .sq {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .sq-num {
+    display: inline-block;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 24px;
+    margin-bottom: 6px;
+  }
+  .sq strong { display: block; margin-top: 2px; }
+
+  .prompt-box {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin: 14px 0;
+    font-family: ui-monospace, "SF Mono", "Monaco", monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    border: 2px solid #1e293b;
+  }
+  .prompt-label {
+    background: #fbbf24;
+    color: #78350f;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 6px 12px;
+    border-radius: 6px 6px 0 0;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .prompt-tip {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+    color: #78350f;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .check {
+    background: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+  }
+  .check h3 { margin: 0 0 8px; color: #047857; font-size: 15px; }
+  .check ul { padding-left: 22px; margin: 6px 0; font-size: 14px; }
+  .check li { margin: 4px 0; }
+
+  .fallback {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+  }
+  .fallback h3 { margin: 0 0 8px; color: #991b1b; font-size: 15px; }
+  .fallback p { font-size: 13px; margin: 4px 0; }
+
+  @media (max-width: 760px) {
+    .steps-quick { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 一键搭建</h1>
+<div class="subtitle">2026-05-23 周六 · 给飞书 Bitable 右侧 AI 助手用的提示词</div>
+
+<div class="hero">
+  <h2>4 步搞定</h2>
+  <div class="steps-quick">
+    <div class="sq"><span class="sq-num">1</span><strong>复制下面整段</strong></div>
+    <div class="sq"><span class="sq-num">2</span><strong>粘贴到右侧 AI 输入框</strong></div>
+    <div class="sq"><span class="sq-num">3</span><strong>按回车，等它建</strong></div>
+    <div class="sq"><span class="sq-num">4</span><strong>核对结构 + 调缺漏</strong></div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>步骤 1 · 复制下面整段提示词</h2>
+
+  <div class="prompt-tip">
+    <strong>提示</strong>：点击下面的黑色框任意位置 → Cmd+A 全选 → Cmd+C 复制 → 切到飞书右侧"Enter your question"框粘贴。
+  </div>
+
+  <div class="prompt-box">请帮我建一个多维表格，用于雅思口语 Part 2 题卡批量生成系统。
+
+# 表名
+雅思口语 Part 2 AI 题卡生成器
+
+# 5 个字段（请按顺序建）
+
+## 字段 1：话题
+- 类型：文本
+- 用途：我手动输入话题
+
+## 字段 2：题卡
+- 类型：AI 字段
+- 引用字段：话题
+- 模型：豆包 Pro 或 DeepSeek-R1
+- 自定义要求：
+你是 BC（British Council）认证的雅思口语主考官，12 年带考经验，专精 Part 2 题卡设计。根据用户提供的话题领域，输出一道标准 IELTS Speaking Part 2 题卡。
+
+格式要求（严格遵守）：
+Describe [完整题目，含核心宾语]
+You should say:
+- [bullet 1: who / what / when 维度]
+- [bullet 2: where / how 维度]
+- [bullet 3: why (the reason / motivation) 维度]
+- [bullet 4: how you feel about it / why it's memorable 维度]
+
+约束：题目必须贴近 IELTS 真题考点风格，不要生造话题；4 个 bullet 必须覆盖 4 个不同维度，不要重复；不要输出任何解释、寒暄、"希望对你有帮助"等套话；不要追加 Part 3 follow-up 问题；不要追加中文翻译。
+
+## 字段 3：评分要点
+- 类型：AI 字段
+- 引用字段：话题 + 题卡
+- 模型：同上
+- 自定义要求：
+你是雅思口语考官，根据下面的话题和题卡，输出 4 维评分要点。
+
+格式要求（严格遵守）：
+【FC 流利与连贯】[这道题考察的连贯性要点 + 推荐的 3-5 个时序/逻辑衔接词，50-80 字]
+【LR 词汇资源】[8 个该话题必备的 high-band 词汇或固定搭配，用逗号分隔]
+【GRA 语法范围与准确性】[该话题适合展示的 2-3 种语法结构，如 past perfect / conditional / cleft sentence / relative clauses，每个配一个示例]
+【P 发音】[2-3 个学生容易读错的关键单词及音标]
+
+约束：词汇必须是 band 7.5+ 级别，禁用 'beautiful' / 'important' / 'good' / 'very useful' 这种基础词；不要输出解释性套话；不要追加总结。
+
+## 字段 4：范文
+- 类型：AI 字段
+- 引用字段：话题 + 题卡
+- 模型：同上
+- 自定义要求：
+你是 BC 认证雅思考官，根据话题和题卡，写一篇 7.5-8.0 band 的 Part 2 范文。
+
+格式要求（严格遵守）：
+【范文】[严格 180-220 词的范文]
+【高分词汇】[范文中用到的 5-8 个 band 7.5+ 词汇或固定搭配，逗号分隔]
+【衔接手段】[范文中用到的 4-6 个连接词或衔接短语，逗号分隔]
+【预估 band】[7.5 / 8.0 / 8.5 三选一]
+
+范文口径（重要）：不要追求 9.0 完美——9.0 范文会显出 AI 生成痕迹（用词过于学术、句式过于复杂、无任何冗余）；必须包含至少 1 处"自然口语化"特征：filler words（well / you know / I mean）、轻微自我修正、或个人化细节；必须完整覆盖题卡 4 个 bullet（这是 Part 2 评分硬指标）；不要用 'In conclusion' / 'To sum up' / 'All in all' 这种书面化套句——Part 2 是口述；不要追加中文翻译。
+
+## 字段 5：常见错误
+- 类型：AI 字段
+- 引用字段：话题
+- 模型：同上
+- 自定义要求：
+你是雅思口语教研老师，专精错误诊断。根据话题，输出该话题下中国学生在 Part 2 答题时最常犯的 5 个错误。
+
+格式要求（严格遵守）：
+1. 错误：[具体描述，必须明确到语法点或词汇点]
+   修正：[怎么改，给出正确表达]
+2. 错误：...
+   修正：...
+3. 错误：...
+   修正：...
+4. 错误：...
+   修正：...
+5. 错误：...
+   修正：...
+
+约束（最重要）：不要写"语法错误"/"词汇不够"这种笼统描述；时态错误必须写明："应该用 past simple 但学生用了 present perfect"；词汇错误必须写明具体词："用 effect 当动词代替 affect"；答题结构错误必须具体："只答 3 个 bullet，漏掉第 4 个 'how you feel about it'"；每条错误必须配具体 fix（不只是诊断）；不要追加总结或建议。
+
+# 预填 5 行测试数据
+
+请在「话题」列依次填入 5 行：
+1. 科技
+2. 一位影响过你的老师
+3. 一次特别的旅行
+4. 一个你想学的技能
+5. 你最爱的一本书
+
+# 完成后
+
+确认 5 列已建好、字段类型正确、引用关系无误、5 行话题已输入。建好后 4 个 AI 字段会自动跑出内容。</div>
+
+</div>
+
+<div class="section">
+  <h2>步骤 2-3 · 粘贴到飞书 AI + 等它建</h2>
+
+  <div class="prompt-tip">
+    <strong>位置</strong>：飞书 Bitable 界面<strong>右侧</strong>那个"Hi, how can I help you today?"面板。最底下有个"Enter your question"输入框。把上面整段粘进去，回车。
+  </div>
+
+  <p style="font-size: 14px; color: #4b5563;">
+    AI 会一步一步告诉你它建了什么。建过程中可能会问你确认（比如"是否要建立字段 X"），<strong>都回 yes / 确认</strong>。
+  </p>
+</div>
+
+<div class="section">
+  <h2>步骤 4 · 建完后核对清单</h2>
+
+  <div class="check">
+    <h3>必查 5 项</h3>
+    <ul>
+      <li><strong>表名</strong>：是不是「雅思口语 Part 2 AI 题卡生成器」</li>
+      <li><strong>5 列名字</strong>：话题 / 题卡 / 评分要点 / 范文 / 常见错误</li>
+      <li><strong>列 2-5 是 AI 字段</strong>（点列头看一下，类型显示 "AI" 标记）</li>
+      <li><strong>引用关系正确</strong>：列 3「评分要点」和列 4「范文」都引用了 <strong>话题 + 题卡</strong>（不是只引用一个）</li>
+      <li><strong>5 行话题已填入</strong>：科技 / 老师 / 旅行 / 技能 / 书</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>步骤 5 · 如果 AI 没把 prompt 配进去（最可能出问题的地方）</h2>
+
+  <div class="fallback">
+    <h3>常见情况：AI 把结构建对了，但「自定义要求」框是空的</h3>
+    <p>这是飞书 AI 助手的局限——它能建字段类型和引用关系，但<strong>不一定能直接写入长 prompt 到"自定义要求"</strong>。</p>
+    <p>这时候你<strong>手动补</strong>：</p>
+    <ul style="padding-left: 22px; font-size: 14px; margin: 8px 0;">
+      <li>点列头「题卡」→ 编辑字段 → 找到"自定义要求"框</li>
+      <li>从上面那个大黑框里<strong>抠出题卡那段 prompt</strong>（"## 字段 2：题卡"的"自定义要求："下面）</li>
+      <li>粘贴 → 保存</li>
+      <li>对其他 3 个 AI 字段重复</li>
+    </ul>
+    <p style="margin-top: 10px;"><strong>或者</strong>直接打开 <code>T1-rebuild-5steps.html</code>，那个里面 prompt 是分开的黑框，更好复制。</p>
+  </div>
+</div>
+
+<div class="section" style="background: #1e293b; color: white;">
+  <h2 style="color: white; border-left-color: #fbbf24;">AI 建完 + prompt 都配好后</h2>
+  <p style="font-size: 15px; margin: 10px 0;">
+    等 5-10 分钟让 4 个 AI 字段把 5 × 4 = 20 个格子跑完。
+  </p>
+  <p style="font-size: 15px;">
+    回我一句话：<code style="background: rgba(251,191,36,0.25); padding: 4px 10px; border-radius: 5px;">5 行里 X 行还行</code>
+  </p>
+</div>
+
+</body>
+</html>

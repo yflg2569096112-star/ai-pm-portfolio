@@ -1,0 +1,31 @@
+{
+  "topic": "科技",
+  "card": {
+    "main_question": "Describe a piece of technology that has changed your life.",
+    "bullets": [
+      "what the technology is",
+      "when and how you started using it",
+      "what you use it for",
+      "and explain how it has changed your life"
+    ]
+  },
+  "evaluation_criteria": {
+    "FC": "需要在 1.5-2 分钟内连续描述，避免长停顿；用时序连接词（at first / later on / nowadays）组织 4 个 bullet",
+    "LR": "建议词汇：cutting-edge, indispensable, streamline, ubiquitous, transformative, revolutionize, paradigm shift, double-edged sword",
+    "GRA": "适合展示 present perfect（has changed / have been using）、relative clauses、被动语态描述功能",
+    "P": "注意 ubiquitous /juːˈbɪkwɪtəs/、artificial /ˌɑːtɪˈfɪʃl/、algorithm /ˈælɡərɪðəm/"
+  },
+  "sample_answer": {
+    "text": "Well, the piece of technology I'd like to talk about is my smartphone — specifically, the iPhone I've been using for about four years now. I got it as a graduation gift from my parents, and honestly, at first I just used it for the basics, you know, calls and texts. But over time it's become pretty much indispensable to my daily routine. Nowadays I use it for, well, almost everything — managing my schedule, learning English through apps, even paying for groceries. What's really changed my life is how it's blurred the line between work and personal time. On one hand, I can stay connected with my students after class and answer their questions instantly, which has made me a more responsive teacher. On the other hand, I sometimes find it hard to switch off, and I'll catch myself checking notifications at midnight. So it's a bit of a double-edged sword, but overall I'd say it's transformed how I work, learn, and stay in touch with the people I care about.",
+    "highlighted_vocab": ["indispensable", "blurred the line", "double-edged sword", "transformative", "responsive"],
+    "cohesive_devices": ["well", "honestly", "but over time", "nowadays", "what's really", "on one hand / on the other hand", "overall"],
+    "estimated_band": "8.0"
+  },
+  "common_errors": [
+    {"error": "用 'I am using my phone for 4 years' 代替 present perfect continuous", "fix": "改为 'I've been using my phone for 4 years'"},
+    {"error": "把 'technology' 当可数名词说 'a technology'（除非指具体设备）", "fix": "整体概念用 'technology'，具体设备用 'a piece of technology / a device'"},
+    {"error": "用 'It changes my life' 而不是 'It has changed my life'（题目用了 has changed）", "fix": "和题目时态保持一致，用 present perfect"},
+    {"error": "4 个 bullet 只答 3 个（最常漏掉最后的 explain how）", "fix": "做答前先在心里复述 4 个 bullet，每个至少 25-30 秒"},
+    {"error": "范文中用 'very important' / 'very useful' 这种 7.0 以下词汇", "fix": "替换为 indispensable / pivotal / instrumental 等 band 7.5+ 词汇"}
+  ]
+}

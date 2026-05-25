@@ -1,0 +1,31 @@
+{
+  "topic": "一次特别的旅行",
+  "card": {
+    "main_question": "Describe a trip that you found particularly memorable.",
+    "bullets": [
+      "where you went",
+      "who you went with",
+      "what you did there",
+      "and explain why this trip was memorable"
+    ]
+  },
+  "evaluation_criteria": {
+    "FC": "用时序词组织（first / then / at one point / by the end of the trip）；五感描述（what I saw, heard, smelled）能拉高 FC 分",
+    "LR": "建议词汇：picturesque, breathtaking, snow-capped, cobblestone, bustling, off the beaten track, reconnect, unwind",
+    "GRA": "past simple 主线 + past continuous 渲染场景（'while we were walking...'）；I'd say / I'd rather 等 conditional",
+    "P": "注意 picturesque /ˌpɪktʃəˈresk/、cobblestone /ˈkɒblstəʊn/、Erhai 等地名读音"
+  },
+  "sample_answer": {
+    "text": "The trip I'd like to talk about is one I took to Yunnan with my parents about three years ago. We spent around ten days travelling through Lijiang and Dali — two ancient towns in the southwest of China that I'd been dreaming of visiting for ages. What made the trip so special wasn't just the picturesque scenery, although the snow-capped Jade Dragon Mountain was breathtaking. It was more about the time I got to spend with my parents, just the three of us, away from all the usual distractions. We'd walk through these cobblestone streets at sunset, stop at little local cafés, and have these long conversations we'd never had time for back home. I remember one evening in Dali, we sat by Erhai Lake watching the sun go down, and my dad started telling stories from his childhood that I'd never heard before. That moment really stayed with me. Looking back, it wasn't the famous landmarks or the photos that made it memorable — it was the chance to reconnect with my parents as people, not just as parents. I think that's why I'd say it was the best trip of my life.",
+    "highlighted_vocab": ["picturesque", "snow-capped", "breathtaking", "cobblestone", "reconnect"],
+    "cohesive_devices": ["what made the trip so special", "although", "I remember", "looking back", "I'd say"],
+    "estimated_band": "8.0"
+  },
+  "common_errors": [
+    {"error": "用 'I went there with my parent'（单复数错）", "fix": "'with my parents'（绝大多数情况复数）"},
+    {"error": "形容词单调，'beautiful' / 'good' / 'nice' 重复 5 次以上", "fix": "用 picturesque / stunning / breathtaking / quaint / charming 轮替"},
+    {"error": "用 'we have been to Yunnan' 描述过去经历", "fix": "明确指过去某次行程用 past simple：'we went to Yunnan'"},
+    {"error": "只描述地方有什么（景点 / 食物），不答 'why memorable'（4 bullet 最常漏 explain why）", "fix": "必须有一段说明 '为什么记忆深刻'——情感原因比景点本身更得分"},
+    {"error": "时间单位混淆：'3 days ago' 实际是 '3 years ago'", "fix": "做答前先在心里确认时间单位"}
+  ]
+}

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 重建 · 5 步走</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 28px 22px 80px;
+    color: #1f2937;
+    line-height: 1.6;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 22px; }
+
+  .hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+    color: white;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .hero h2 { color: white; border: 0; padding: 0; margin: 0 0 8px; font-size: 20px; }
+  .hero p { margin: 6px 0; font-size: 14px; opacity: 0.9; }
+  .hero .total {
+    display: inline-block;
+    background: rgba(251,191,36,0.25);
+    color: #fde68a;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .step {
+    background: white;
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    position: relative;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .step-num {
+    display: inline-flex;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-title { font-size: 18px; font-weight: 700; flex: 1; }
+  .step-time {
+    font-size: 12px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .action {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .action strong { color: #92400e; }
+
+  .substep {
+    margin: 10px 0;
+    padding-left: 22px;
+    position: relative;
+    font-size: 14px;
+  }
+  .substep::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #2563eb;
+    font-weight: 700;
+  }
+
+  .copy-box {
+    background: #1e293b;
+    color: #f3f4f6;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: ui-monospace, "SF Mono", "Monaco", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    position: relative;
+    overflow-x: auto;
+  }
+  .copy-box::before {
+    content: "复制下面整段 ⬇";
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: #fbbf24;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+
+  .field-config {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 12px 0;
+  }
+  .field-config h4 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: #1e40af;
+  }
+  .field-config .ref {
+    background: #dbeafe;
+    color: #1e3a8a;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: inline-block;
+    margin: 4px 0 10px;
+    font-weight: 600;
+  }
+
+  table.topics {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+  }
+  table.topics th, table.topics td {
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+  }
+  table.topics th { background: #f3f4f6; font-weight: 600; font-size: 13px; }
+  table.topics td.num { width: 40px; text-align: center; background: #fef3c7; font-weight: 700; color: #92400e; }
+  table.topics td.topic { font-weight: 600; }
+
+  .tip {
+    background: #ecfdf5;
+    border-left: 4px solid #10b981;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #065f46;
+  }
+
+  .checklist {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 18px;
+    border: 2px solid #10b981;
+  }
+  .checklist h3 {
+    margin-top: 0;
+    color: #047857;
+    font-size: 17px;
+  }
+  .checklist ul { padding-left: 22px; margin: 8px 0; }
+  .checklist li { margin: 6px 0; font-size: 14px; }
+
+  .final-action {
+    background: #1e293b;
+    color: white;
+    padding: 24px 28px;
+    border-radius: 14px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .final-action h2 {
+    color: white; border: 0; padding: 0;
+    font-size: 20px; margin: 0 0 8px;
+  }
+  .final-action code {
+    background: rgba(251,191,36,0.25);
+    color: #fde68a;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 重建 · 5 步走</h1>
+<div class="subtitle">2026-05-23 周六 · 全部手动配置（不依赖右侧 AI 助手，避免它乱建）</div>
+
+<div class="hero">
+  <h2>核心思路</h2>
+  <p>右侧"Hi, how can I help you today?" 那个 AI 助手有时候建出来的结构不准。<strong>我们手动建</strong>更可控。</p>
+  <p>5 步，每步含截图位置提示 + 复制粘贴内容。完工后等 AI 字段跑结果。</p>
+  <span class="total">总用时约 25-30 分钟</span>
+</div>
+
+<!-- Step 1 -->
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">1</span>
+    <span class="step-title">重命名表 + 第 1 列</span>
+    <span class="step-time">2 分钟</span>
+  </div>
+
+  <div class="action"><strong>位置</strong>：顶部"表格"标签 + 第 1 列"文本"列头</div>
+
+  <div class="substep"><strong>双击"表格"标签</strong>（顶部蓝色 tab），改名为：</div>
+  <div class="copy-box">雅思口语 Part 2 AI 题卡生成器</div>
+
+  <div class="substep"><strong>双击"文本"列头</strong>（表格第 1 列），改名为：</div>
+  <div class="copy-box">话题</div>
+</div>
+
+<!-- Step 2 -->
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">2</span>
+    <span class="step-title">加 4 个 AI 字段（先建空字段）</span>
+    <span class="step-time">5 分钟</span>
+  </div>
+
+  <div class="action"><strong>位置</strong>：表头最右"+"按钮</div>
+
+  <div class="substep">点击列头最右"+"号 → 选择字段类型 <strong>"AI 字段"</strong>（也叫"AI 字段捷径"）</div>
+
+  <div class="substep">依次创建 4 个，名字分别叫：</div>
+
+  <table class="topics">
+    <tr><th>顺序</th><th>列名</th></tr>
+    <tr><td class="num">2</td><td class="topic">题卡</td></tr>
+    <tr><td class="num">3</td><td class="topic">评分要点</td></tr>
+    <tr><td class="num">4</td><td class="topic">范文</td></tr>
+    <tr><td class="num">5</td><td class="topic">常见错误</td></tr>
+  </table>
+
+  <div class="tip"><strong>提示</strong>：建的时候先不要管 prompt 配置，4 个字段都建出来再统一配。模型可以统一选<strong>豆包 Pro / DeepSeek-R1</strong>（飞书自带，免费）。</div>
+</div>
+
+<!-- Step 3 -->
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">3</span>
+    <span class="step-title">配置 4 个 AI 字段的 Prompt</span>
+    <span class="step-time">15 分钟</span>
+  </div>
+
+  <div class="action"><strong>怎么配</strong>：点每个 AI 字段列头 → 编辑字段 → 看到"引用字段"和"自定义要求"两个框 → 按下面表格填</div>
+
+  <!-- Field 2 -->
+  <div class="field-config">
+    <h4>字段 2 · 题卡</h4>
+    <span class="ref">引用字段：话题</span>
+    <div style="font-size: 13px; color: #4b5563; margin: 8px 0 6px;">自定义要求 ↓</div>
+    <div class="copy-box">你是 BC（British Council）认证的雅思口语主考官，12 年带考经验，专精 Part 2 题卡设计。
+
+根据用户提供的话题领域，输出一道标准 IELTS Speaking Part 2 题卡。
+
+格式要求（严格遵守）：
+
+Describe [完整题目，含核心宾语]
+
+You should say:
+- [bullet 1: who / what / when 维度]
+- [bullet 2: where / how 维度]
+- [bullet 3: why (the reason / motivation) 维度]
+- [bullet 4: how you feel about it / why it's memorable 维度]
+
+约束：
+- 题目必须贴近 IELTS 真题考点风格，不要生造话题
+- 4 个 bullet 必须覆盖 4 个不同维度，不要重复
+- 不要输出任何解释、寒暄、"希望对你有帮助"等套话
+- 不要追加 Part 3 follow-up 问题
+- 不要追加中文翻译</div>
+  </div>
+
+  <!-- Field 3 -->
+  <div class="field-config">
+    <h4>字段 3 · 评分要点</h4>
+    <span class="ref">引用字段：话题 + 题卡</span>
+    <div style="font-size: 13px; color: #4b5563; margin: 8px 0 6px;">自定义要求 ↓</div>
+    <div class="copy-box">你是雅思口语考官，根据下面的话题和题卡，输出 4 维评分要点。
+
+格式要求（严格遵守）：
+
+【FC 流利与连贯】
+[这道题考察的连贯性要点 + 推荐的 3-5 个时序/逻辑衔接词，50-80 字]
+
+【LR 词汇资源】
+[8 个该话题必备的 high-band 词汇或固定搭配，用逗号分隔]
+
+【GRA 语法范围与准确性】
+[该话题适合展示的 2-3 种语法结构，如 past perfect / conditional / cleft sentence / relative clauses，每个配一个示例]
+
+【P 发音】
+[2-3 个学生容易读错的关键单词及音标]
+
+约束：
+- 词汇必须是 band 7.5+ 级别，禁用 'beautiful' / 'important' / 'good' / 'very useful' 这种基础词
+- 不要输出解释性套话
+- 不要追加总结</div>
+  </div>
+
+  <!-- Field 4 -->
+  <div class="field-config">
+    <h4>字段 4 · 范文</h4>
+    <span class="ref">引用字段：话题 + 题卡</span>
+    <div style="font-size: 13px; color: #4b5563; margin: 8px 0 6px;">自定义要求 ↓</div>
+    <div class="copy-box">你是 BC 认证雅思考官，根据话题和题卡，写一篇 7.5-8.0 band 的 Part 2 范文。
+
+格式要求（严格遵守）：
+
+【范文】
+[严格 180-220 词的范文]
+
+【高分词汇】
+[范文中用到的 5-8 个 band 7.5+ 词汇或固定搭配，逗号分隔]
+
+【衔接手段】
+[范文中用到的 4-6 个连接词或衔接短语，逗号分隔]
+
+【预估 band】
+[7.5 / 8.0 / 8.5 三选一]
+
+范文口径（重要）：
+- 不要追求 9.0 完美——9.0 范文会显出 AI 生成痕迹（用词过于学术、句式过于复杂、无任何冗余）
+- 必须包含至少 1 处"自然口语化"特征：filler words（well / you know / I mean）、轻微自我修正、或个人化细节
+- 必须完整覆盖题卡 4 个 bullet（这是 Part 2 评分硬指标）
+- 不要用 'In conclusion' / 'To sum up' / 'All in all' 这种书面化套句——Part 2 是口述
+- 不要追加中文翻译</div>
+  </div>
+
+  <!-- Field 5 -->
+  <div class="field-config">
+    <h4>字段 5 · 常见错误</h4>
+    <span class="ref">引用字段：话题</span>
+    <div style="font-size: 13px; color: #4b5563; margin: 8px 0 6px;">自定义要求 ↓</div>
+    <div class="copy-box">你是雅思口语教研老师，专精错误诊断。
+
+根据话题，输出该话题下中国学生在 Part 2 答题时最常犯的 5 个错误。
+
+格式要求（严格遵守）：
+
+1. 错误：[具体描述，必须明确到语法点或词汇点]
+   修正：[怎么改，给出正确表达]
+
+2. 错误：...
+   修正：...
+
+3. 错误：...
+   修正：...
+
+4. 错误：...
+   修正：...
+
+5. 错误：...
+   修正：...
+
+约束（最重要）：
+- 不要写"语法错误"/"词汇不够"这种笼统描述
+- 时态错误必须写明："应该用 past simple 但学生用了 present perfect"
+- 词汇错误必须写明具体词："用 effect 当动词代替 affect"
+- 答题结构错误必须具体："只答 3 个 bullet，漏掉第 4 个 'how you feel about it'"
+- 每条错误必须配具体 fix（不只是诊断）
+- 不要追加总结或建议</div>
+  </div>
+</div>
+
+<!-- Step 4 -->
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">4</span>
+    <span class="step-title">输入 5 个测试话题</span>
+    <span class="step-time">2 分钟</span>
+  </div>
+
+  <div class="action"><strong>位置</strong>：在「话题」列依次输入 5 行</div>
+
+  <table class="topics">
+    <tr><th>#</th><th>话题（直接复制）</th></tr>
+    <tr><td class="num">1</td><td class="topic">科技</td></tr>
+    <tr><td class="num">2</td><td class="topic">一位影响过你的老师</td></tr>
+    <tr><td class="num">3</td><td class="topic">一次特别的旅行</td></tr>
+    <tr><td class="num">4</td><td class="topic">一个你想学的技能</td></tr>
+    <tr><td class="num">5</td><td class="topic">你最爱的一本书</td></tr>
+  </table>
+
+  <div class="tip"><strong>输入完毕</strong>，4 个 AI 字段会<strong>自动开始跑</strong>。每行 4 列 = 5 × 4 = 20 个 AI 单元批量生成。</div>
+</div>
+
+<!-- Step 5 -->
+<div class="step">
+  <div class="step-header">
+    <span class="step-num">5</span>
+    <span class="step-title">等 AI 跑完 + 回报结果</span>
+    <span class="step-time">5-10 分钟（等 AI）</span>
+  </div>
+
+  <div class="substep">AI 字段需要时间，<strong>等</strong>。一般 5-10 分钟。</div>
+
+  <div class="substep">跑完后，你<strong>凭雅思教学直觉</strong>判断每行 4 个格子的质量</div>
+
+  <div class="checklist">
+    <h3>每行检查清单</h3>
+    <ul>
+      <li><strong>题卡</strong>：有 4 个 bullet 吗？格式像 IELTS 真题吗？</li>
+      <li><strong>评分要点</strong>：8 个词汇是不是 band 7.5+？（不是"good / important"这种）</li>
+      <li><strong>范文</strong>：180-220 词？有"自然口语化"特征？（well / I mean / 个人化细节）</li>
+      <li><strong>常见错误</strong>：5 条都具体到语法点/词汇点？（不是"语法错"泛泛而谈）</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Final Action -->
+<div class="final-action">
+  <h2>5 行跑完后，回我一句话</h2>
+  <p style="opacity: 0.9; margin: 6px 0 14px;">
+    例如：
+  </p>
+  <p>
+    <code>5 行里 4 行都还行，第 3 行范文跑偏了</code>
+  </p>
+  <p style="margin-top: 10px;">
+    或：<code>大部分不行，AI 不像考官</code>
+  </p>
+  <p style="margin-top: 14px; font-size: 13px; opacity: 0.8;">
+    我会根据你的反馈决定是<strong>调 prompt 再跑</strong>还是<strong>收尾归档</strong>。
+  </p>
+</div>
+
+</body>
+</html>

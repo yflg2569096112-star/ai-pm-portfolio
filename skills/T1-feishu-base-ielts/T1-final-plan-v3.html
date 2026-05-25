@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 + E1 最终方案 v3 · 求职定位</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    color: #1f2937;
+    line-height: 1.65;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 30px; margin: 0 0 4px; letter-spacing: -0.5px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+  h3 { font-size: 16px; margin: 16px 0 6px; }
+
+  /* 顶部最终方案卡 */
+  .final {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: white;
+    padding: 32px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(6,95,70,0.25);
+  }
+  .final h2 {
+    color: white;
+    border-left-color: #fbbf24;
+    font-size: 22px;
+    margin: 0 0 14px;
+  }
+  .final .core {
+    font-size: 19px;
+    background: rgba(255,255,255,0.13);
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin: 12px 0;
+  }
+  .final code {
+    background: rgba(255,255,255,0.22);
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-family: ui-monospace, monospace;
+    font-size: 15px;
+  }
+  .final .why {
+    background: rgba(251,191,36,0.20);
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+
+  /* 求职定位 vs 之前 */
+  .positioning {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+  .pos-before, .pos-after {
+    padding: 18px;
+    border-radius: 10px;
+  }
+  .pos-before {
+    background: #fef2f2;
+    border: 2px solid #fca5a5;
+  }
+  .pos-after {
+    background: #f0fdf4;
+    border: 2px solid #6ee7b7;
+  }
+  .pos-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .pos-before .pos-label { color: #991b1b; }
+  .pos-after .pos-label { color: #166534; }
+  .pos-line { font-size: 14px; margin: 6px 0; }
+
+  /* 架构图 */
+  .arch {
+    background: #fafafa;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 30px;
+    margin: 16px 0;
+  }
+  .arch-title {
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .tenant {
+    border: 3px dashed #6366f1;
+    border-radius: 12px;
+    padding: 20px;
+    background: #eef2ff;
+    position: relative;
+  }
+  .tenant-label {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: white;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #4338ca;
+    font-weight: 700;
+  }
+  .tenant-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .node {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    border: 2px solid;
+    text-align: center;
+  }
+  .node.backend { border-color: #f59e0b; }
+  .node.frontend { border-color: #3b82f6; }
+  .node-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+  .node-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .node-sub {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+  .node-detail {
+    text-align: left;
+    font-size: 12px;
+    color: #374151;
+    background: #f9fafb;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  .connector {
+    text-align: center;
+    font-size: 12px;
+    color: #6366f1;
+  }
+  .connector .arrow { font-size: 28px; line-height: 1; }
+  .connector .label {
+    font-weight: 700;
+    margin-top: 6px;
+    background: #eef2ff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: inline-block;
+  }
+  .users {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .user-box {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #d1d5db;
+    font-size: 13px;
+  }
+  .user-icon { font-size: 22px; margin-bottom: 4px; }
+
+  /* 路线图 */
+  .roadmap {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0 8px;
+  }
+  .rm {
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 13px;
+    border: 2px solid;
+  }
+  .rm.now { background: #fef3c7; border-color: #f59e0b; }
+  .rm.soon { background: #f3f4f6; border-color: #d1d5db; }
+  .rm.mid { background: #dbeafe; border-color: #3b82f6; }
+  .rm.late { background: #d1fae5; border-color: #10b981; }
+  .rm .w {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .rm .what { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .rm .desc { font-size: 12px; color: #4b5563; }
+
+  /* 简历讲法 */
+  .resume-line {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 18px 22px;
+    border-radius: 0 10px 10px 0;
+    margin: 14px 0;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .resume-line strong { font-style: normal; color: #92400e; }
+
+  /* 警示框 */
+  .caveats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .caveat {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 14px 16px;
+    border-radius: 0 10px 10px 0;
+  }
+  .caveat-title {
+    font-weight: 700;
+    color: #991b1b;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .caveat-body {
+    font-size: 13px;
+    color: #4b5563;
+  }
+
+  /* 下一步 */
+  .next {
+    background: #1e293b;
+    color: white;
+    padding: 28px;
+    border-radius: 14px;
+  }
+  .next h2 {
+    color: white;
+    border-left-color: #fbbf24;
+    margin: 0 0 14px;
+  }
+  .next ol {
+    padding-left: 22px;
+    margin: 12px 0;
+  }
+  .next ol li {
+    margin: 10px 0;
+    font-size: 15px;
+  }
+  .next .est {
+    display: inline-block;
+    background: rgba(251,191,36,0.25);
+    color: #fbbf24;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-left: 8px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 760px) {
+    .positioning, .caveats, .tenant-grid, .users, .roadmap { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: 1fr 1fr; }
+    .connector .arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 + E1 最终方案</h1>
+<div class="subtitle">2026-05-23 周六 · 你确认 Aily 走新航道企业账号 · 求职定位</div>
+
+<!-- 1. 顶部最终方案 -->
+<div class="final">
+  <h2>最终方案（一句话）</h2>
+
+  <div class="core">
+    <strong>整个产品都在飞书生态里。</strong>
+    <br>
+    <code>T1</code> = 飞书多维表格做<strong>教研后台</strong>（W1 本周收尾）
+    <br>
+    <code>E1</code> = 飞书 Aily 做<strong>学生前台</strong>（W5-W8 做），原生调用 Bitable 数据
+  </div>
+
+  <div class="why">
+    <strong>为什么这是最优解</strong>：你有新航道企业账号 = Aily + Bitable 在<strong>同一个租户</strong>，数据不出企业 IT，完全原生打通，零外部依赖。这种"端到端 AI 嵌进企业工作流"的故事，在 AI PM 求职市场上是稀缺标签。
+  </div>
+</div>
+
+<!-- 2. 求职定位升级 -->
+<div class="section">
+  <h2>求职定位升级（之前 → 现在）</h2>
+
+  <div class="positioning">
+    <div class="pos-before">
+      <div class="pos-label">之前的定位 · 弱</div>
+      <div class="pos-line">通用 AI PM 候选人</div>
+      <div class="pos-line">"我做了个人作品集，证明我懂 AI"</div>
+      <div class="pos-line">和市场上几千个同类候选人雷同</div>
+      <div class="pos-line">面试讲故事靠"我以为"</div>
+    </div>
+    <div class="pos-after">
+      <div class="pos-label">现在的定位 · 强</div>
+      <div class="pos-line"><strong>K12 教育集团 AI 落地 PM</strong></div>
+      <div class="pos-line">"我在新航道集团内部端到端落地了 AI 教研产品"</div>
+      <div class="pos-line">具备<strong>真实业务场景 + 真实数据 + 真实用户</strong>的差异化</div>
+      <div class="pos-line">面试讲故事有<strong>第一手观察</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. 架构图 -->
+<div class="section">
+  <h2>整体架构</h2>
+
+  <div class="arch">
+    <div class="arch-title">所有节点都在新航道企业飞书租户内</div>
+
+    <div class="tenant">
+      <div class="tenant-label">新航道飞书租户</div>
+
+      <div class="tenant-grid">
+        <div class="node backend">
+          <div class="node-icon">⊞</div>
+          <div class="node-title">T1 · 多维表格</div>
+          <div class="node-sub">教研后台 · 已 80% 完成</div>
+          <div class="node-detail">
+            5 行 × 4 AI 字段<br>
+            话题 → 题卡 → 评分 → 范文 → 错误<br>
+            <strong>用户：你 / 教研组</strong>
+          </div>
+        </div>
+
+        <div class="connector">
+          <div class="arrow">⇌</div>
+          <div class="label">同租户原生数据流</div>
+        </div>
+
+        <div class="node frontend">
+          <div class="node-icon">◉</div>
+          <div class="node-title">E1 · Aily 智能体</div>
+          <div class="node-sub">学生前台 · W5-W8 做</div>
+          <div class="node-detail">
+            对话式 Part 2 练习入口<br>
+            调用 Bitable 题库 + 实时评分<br>
+            <strong>用户：雅思学员</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="users">
+        <div class="user-box">
+          <div class="user-icon">👤</div>
+          <strong>你（PM + 教师）</strong>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">维护题库 + 看数据</div>
+        </div>
+        <div style="text-align: center; color: #6366f1;">↓ 分发 ↓</div>
+        <div class="user-box">
+          <div class="user-icon">👥</div>
+          <strong>学员（5-50 人 pilot）</strong>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">飞书 IM / 服务台访问</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size: 13px; color: #6b7280; margin-top: 16px; text-align: center;">
+      关键优势：数据从 Bitable 流到 Aily 是<strong>同租户内原生调用</strong>，不需要 API、不需要外部部署、不需要数据导出
+    </p>
+  </div>
+</div>
+
+<!-- 4. 简历讲法 -->
+<div class="section">
+  <h2>新的简历讲法（重点 bullet）</h2>
+
+  <div class="resume-line">
+    "在新航道集团内部以飞书生态搭建端到端 AI 教育产品：用<strong>多维表格 AI 字段</strong>做教研后台批量生产 Part 2 题卡材料，用<strong>飞书 Aily 智能体</strong>调用后台数据搭建学员对话练习入口，通过飞书 IM 分发给 [N] 位学员试用——<strong>完整双端产品全栈在企业内部 IT 完成，符合教育行业 PII 合规要求</strong>。"
+  </div>
+
+  <p style="font-size: 14px; color: #4b5563;">
+    招聘官看到这一句会马上问：「N 是多少？数据怎么留存？转化率多少？」——这些都是<strong>面试可深聊的点</strong>，每答一个就是一次加分。
+  </p>
+</div>
+
+<!-- 5. 时间路线 -->
+<div class="section">
+  <h2>16 周路线（求职导向）</h2>
+
+  <div class="roadmap">
+    <div class="rm now">
+      <div class="w">W1 本周</div>
+      <div class="what">T1 收尾</div>
+      <div class="desc">飞书表格测试 + 文档化</div>
+    </div>
+    <div class="rm soon">
+      <div class="w">W2-W4</div>
+      <div class="what">T2 / T3 / T4</div>
+      <div class="desc">API + RAG + Workflow<br>原计划不变</div>
+    </div>
+    <div class="rm mid">
+      <div class="w">W5-W8</div>
+      <div class="what">E1 主力</div>
+      <div class="desc">Aily 学生 bot<br>+ 内部 pilot 5-10 人</div>
+    </div>
+    <div class="rm late">
+      <div class="w">W9-W16</div>
+      <div class="what">E2-E5 + 投递</div>
+      <div class="desc">其他作品 + 简历投递<br>面试中用 T1+E1 讲故事</div>
+    </div>
+  </div>
+
+  <p style="font-size: 13px; color: #6b7280; margin-top: 12px;">
+    <strong>关键里程碑</strong>：W8 结束时你应该有 T1 + E1 两个东西能跑起来 + 5-10 个学员的真实使用数据。这是后续 8 周面试时最强的弹药。
+  </p>
+</div>
+
+<!-- 6. 3 个警示 -->
+<div class="section">
+  <h2>3 个必须警觉的事</h2>
+
+  <div class="caveats">
+    <div class="caveat">
+      <div class="caveat-title">1 · PII 脱敏</div>
+      <div class="caveat-body">
+        新航道租户内 = 可能接触真实学员姓名/手机/成绩。<br>
+        <strong>Bitable / Aily 内不要存原始 PII。</strong>用代号"学员 A / B"，截图打码。
+      </div>
+    </div>
+
+    <div class="caveat">
+      <div class="caveat-title">2 · 发布范围</div>
+      <div class="caveat-body">
+        "做出来"和"放给所有学员用"是两件事。<br>
+        <strong>先内部 5 人小范围跑通，再申请放大</strong>。绕过 IT / 教研主管会出大事。
+      </div>
+    </div>
+
+    <div class="caveat">
+      <div class="caveat-title">3 · GitHub 该放什么</div>
+      <div class="caveat-body">
+        Bitable / Aily 应用<strong>本身 push 不到 GitHub</strong>。<br>
+        你的 repo 里只放：脱敏 prompt 文档 + 架构图 + 打码截图 + 复盘——<strong>不放任何真实数据</strong>。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 下一步具体动作 -->
+<div class="next">
+  <h2>你今天起的具体动作</h2>
+
+  <ol>
+    <li>
+      <strong>打开飞书</strong>，看昨天搭的 Bitable 5 行 × 4 列 AI 字段跑出来怎么样
+      <span class="est">10 分钟</span>
+    </li>
+    <li>
+      <strong>回我一句话</strong>："5 行里 X 行的 4 个格子都还行" / "大部分不行"
+      <span class="est">1 分钟</span>
+    </li>
+    <li>
+      根据你反馈，我决定下一步是<strong>调 prompt</strong> 还是<strong>收尾归档</strong>
+      <span class="est">由我推</span>
+    </li>
+    <li>
+      T1 完工后切到 T2（不要碰 E1，那是 W5 的事）
+      <span class="est">本周末</span>
+    </li>
+  </ol>
+
+  <p style="margin-top: 16px; opacity: 0.85; font-size: 14px;">
+    <strong>本周你只管 T1。E1 / Aily 全部 W5 再说。</strong>不要现在就跳到 Aily，否则 T1 永远收不掉。
+  </p>
+</div>
+
+</body>
+</html>

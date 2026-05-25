@@ -1,0 +1,31 @@
+{
+  "topic": "一位影响过你的老师",
+  "card": {
+    "main_question": "Describe a teacher who has influenced you a lot.",
+    "bullets": [
+      "who the teacher is",
+      "what subject he or she taught",
+      "how the teacher influenced you",
+      "and explain why you remember this teacher"
+    ]
+  },
+  "evaluation_criteria": {
+    "FC": "人物类题目容易陷入流水账，要用 anecdote（小故事）组织内容；用 'I still remember' / 'looking back' 这种 marker 串联回忆",
+    "LR": "建议词汇：lasting impact, mentor, nurture, instill, articulate, in hindsight, formative, set me on a path",
+    "GRA": "适合展示 past simple（描述具体事件）+ present perfect（描述持续影响）的混用；让步从句 'although she could be strict, ...'",
+    "P": "注意 influence /ˈɪnflʊəns/ 重音、character /ˈkærəktə/、unique /juːˈniːk/"
+  },
+  "sample_answer": {
+    "text": "Well, the teacher who's had the most lasting impact on me is Mrs. Wang, my English teacher in high school. She taught us, well, not just English literature, but also how to think critically about texts. I still remember the very first lesson she gave on Shakespeare — instead of going through the standard analysis, she asked us 'What would you do if you were Hamlet?' That kind of question completely opened my mind. What made her unique was that she treated us as adults capable of forming our own opinions. She'd often disagree with us on purpose just to make us defend our arguments, which was, you know, frustrating at the time but incredibly valuable in hindsight. Looking back, she's the reason I ended up becoming a teacher myself. Whenever I'm teaching IELTS now, I catch myself using her techniques — challenging students rather than spoon-feeding them. So although she retired a few years ago, her influence on me is still very much alive every time I step into a classroom. I'd say without her, I wouldn't be half the educator I've become.",
+    "highlighted_vocab": ["lasting impact", "think critically", "in hindsight", "spoon-feeding", "half the educator"],
+    "cohesive_devices": ["well", "what made her unique", "looking back", "so although", "I'd say"],
+    "estimated_band": "8.0"
+  },
+  "common_errors": [
+    {"error": "用 'have taught me' 而不是 'taught me'（描述过去经历应该用 past simple，不要混 present perfect）", "fix": "She taught me / She used to teach us"},
+    {"error": "用 'effect me' 代替 'affect me' / 'influence me'（effect 是名词不是动词）", "fix": "用 'affect me deeply' 或 'have a profound effect on me'"},
+    {"error": "用 'I love her very much' 来表达 admire（中式表达，过于直白）", "fix": "用 'I have great admiration for her' / 'I look up to her'"},
+    {"error": "只描述老师特征，不答 'how she influenced you'（4 bullet 最常漏第 3 个）", "fix": "必须举一个具体例子，说明老师做了什么改变了你"},
+    {"error": "用 'high school teacher' 重复 3 次以上（缺少代词替换）", "fix": "第二次用 'she'、'this mentor'、'that figure' 交替"}
+  ]
+}

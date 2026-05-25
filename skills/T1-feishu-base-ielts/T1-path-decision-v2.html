@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>T1 路径决策 v2 · 查证后的结论</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    color: #1f2937;
+    line-height: 1.65;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 30px; margin: 0 0 4px; letter-spacing: -0.5px; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+  h3 { font-size: 16px; margin: 16px 0 6px; }
+
+  /* 推荐卡 */
+  .recommend {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: white;
+    padding: 32px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(6,95,70,0.25);
+  }
+  .recommend h2 {
+    color: white;
+    border-left-color: #fbbf24;
+    font-size: 22px;
+    margin: 0 0 14px;
+  }
+  .recommend .verdict {
+    font-size: 18px;
+    background: rgba(255,255,255,0.13);
+    padding: 18px;
+    border-radius: 10px;
+    margin: 14px 0;
+  }
+  .recommend code {
+    background: rgba(255,255,255,0.22);
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-family: ui-monospace, monospace;
+  }
+
+  /* 证据徽章 */
+  .verified {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* 引述框 */
+  .quote {
+    background: #f9fafb;
+    border-left: 3px solid #3b82f6;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #374151;
+    border-radius: 0 8px 8px 0;
+  }
+  .quote .src {
+    display: block;
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .quote .src a { color: #2563eb; text-decoration: none; }
+
+  /* A vs B 用户场景 */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .scene {
+    border-radius: 12px;
+    padding: 20px;
+    border: 2px solid #e5e7eb;
+  }
+  .scene.a { background: #fef3c7; border-color: #f59e0b; }
+  .scene.b { background: #dbeafe; border-color: #3b82f6; }
+  .scene h3 {
+    margin-top: 0;
+    font-size: 17px;
+  }
+  .scene .step {
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    font-size: 14px;
+  }
+  .scene .step strong { display: inline-block; min-width: 50px; color: #4b5563; }
+
+  /* 平台对比表 */
+  table.platforms {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 14px 0;
+  }
+  table.platforms th, table.platforms td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  table.platforms th { background: #f3f4f6; font-weight: 600; font-size: 13px; }
+  table.platforms td.tool { font-weight: 600; background: #fafafa; }
+  table.platforms .yes { color: #166534; font-weight: 600; }
+  table.platforms .no { color: #991b1b; }
+  table.platforms .partial { color: #92400e; }
+
+  /* 推理链 */
+  .reasoning {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 16px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+  .reasoning .step {
+    margin: 6px 0;
+    padding-left: 8px;
+  }
+
+  /* 路线图 */
+  .roadmap {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+    margin: 20px 0;
+  }
+  .rm-box {
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .rm-now { background: #fef3c7; border: 2px solid #f59e0b; }
+  .rm-later { background: #dbeafe; border: 2px solid #3b82f6; }
+  .rm-future { background: #f3e8ff; border: 2px solid #a855f7; }
+  .rm-arrow { font-size: 24px; color: #9ca3af; text-align: center; }
+  .rm-box .when {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .sources {
+    background: #f3f4f6;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #4b5563;
+  }
+  .sources a { color: #2563eb; text-decoration: none; }
+  .sources li { margin: 4px 0; }
+
+  @media (max-width: 760px) {
+    .scene-grid { grid-template-columns: 1fr; }
+    .roadmap { grid-template-columns: 1fr; }
+    .rm-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<h1>T1 路径决策（查证后）</h1>
+<div class="subtitle">2026-05-23 周六 · 我去飞书官方文档 + 三大平台对比文章查了一圈，回来给你结论</div>
+
+<!-- 1. 推荐卡 -->
+<div class="recommend">
+  <h2>我的推荐</h2>
+
+  <div class="verdict">
+    <strong style="font-size: 22px;">T1 走 <code>A</code></strong>（你昨天搭的，老师批量生成器）
+    <br>
+    <span style="opacity: 0.9; font-size: 15px;">本周收尾，不要推翻重做。</span>
+  </div>
+
+  <div class="verdict">
+    <strong style="font-size: 18px;">B（学生对话 bot）放到 E1（W5 起做）</strong>
+    <br>
+    <span style="opacity: 0.9; font-size: 14px;">用 Dify 做（Coze 你没权限，飞书 Aily 是企业版）。E1 本来就是"老工具 AI 升级"槽位，正好放学生端对话 bot。</span>
+  </div>
+
+  <div class="verdict" style="background: rgba(251,191,36,0.18);">
+    <strong>这等于把 C（双端产品）拆成两个阶段做</strong>：
+    <br>
+    <span style="font-size: 14px; opacity: 0.95;">W1 完成 T1 = 教师后台（飞书表格）→ W5-W8 完成 E1 = 学生前台（Dify bot），最后两个一串就是端到端 AI 教育产品，简历最完整。</span>
+  </div>
+</div>
+
+<!-- 2. 我查到的事实 -->
+<div class="section">
+  <h2>我从飞书官方文档查到的事实</h2>
+
+  <h3>飞书多维表格 AI 字段是什么<span class="verified">已查证</span></h3>
+  <div class="quote">
+    AI 应用成熟度为 <strong>M3（生产就绪期）</strong>。多维表格字段捷径将<strong>高频场景所需的计算和生成能力封装进字段中</strong>。字段捷径分为 AI 类和公式类。
+    <span class="src">来源：<a href="https://www.feishu.cn/hc/zh-CN/articles/464880997049" target="_blank">飞书帮助中心 · 使用多维表格 AI 字段捷径</a></span>
+  </div>
+
+  <div class="quote">
+    在任意字段加上 AI 捷径，<strong>让 AI 帮助提取、清洗、改写、总结，整列一起跑</strong>。过去要花一下午的活，现在点一下按钮就能结束。
+    <span class="src">来源：飞书官方教程</span>
+  </div>
+
+  <h3>关键结论<span class="verified">已查证</span></h3>
+  <ul>
+    <li><strong>AI 字段 = 列级 AI 公式</strong>，触发时机是"新增/修改一行"，输出是"该格自动生成的内容"</li>
+    <li><strong>设计场景是批量数据处理</strong>（提取/清洗/改写/总结），不是对话</li>
+    <li>它<strong>不是</strong>飞书机器人，<strong>不是</strong>智能体 / Agent</li>
+    <li>"学生跟它对话"这件事，AI 字段做不到——因为它没有交互界面给外部用户</li>
+  </ul>
+
+  <h3>飞书自家的"对话式智能体"在哪里？<span class="verified">已查证</span></h3>
+  <div class="quote">
+    <strong>飞书 aily</strong>（飞书智能伙伴创建平台）是企业级智能体平台，"高效开发出专业的企业级智能应用，并一键发布到飞书、Web 等多个渠道"。
+    <span class="src">来源：<a href="https://www.feishu.cn/content/3d5z9ttt" target="_blank">飞书 aily 官方介绍</a></span>
+  </div>
+  <p style="font-size: 14px; color: #991b1b;">
+    问题：飞书 Aily 是<strong>企业版功能</strong>，个人用户大概率没权限（就跟 Coze 一样卡你）。
+  </p>
+</div>
+
+<!-- 3. A vs B 用具体场景说清楚 -->
+<div class="section">
+  <h2>A 和 B 到底有什么区别（用同一个学生举例）</h2>
+
+  <p style="margin: 6px 0 14px; color: #4b5563;">
+    假设你的学生小李，下周雅思考试，要练 Part 2。两条路径下小李的体验完全不同：
+  </p>
+
+  <div class="scene-grid">
+
+    <div class="scene a">
+      <h3>路径 A · 老师批量生成器</h3>
+      <p style="font-size: 13px; color: #78350f;">小李<strong>看不到</strong>这个工具，他只跟你（老师）打交道。</p>
+
+      <div class="step"><strong>周一</strong> 你打开飞书表格，手填 20 个本周热门话题</div>
+      <div class="step"><strong>周一晚</strong> AI 字段自动跑出 20 × 4 = 80 个格子（题卡 + 评分 + 范文 + 错误）</div>
+      <div class="step"><strong>周二</strong> 你导出表格，发 PDF / Word 给小李</div>
+      <div class="step"><strong>周二-周日</strong> 小李拿着 PDF 自己练，遇到问题<strong>问你</strong>，不是问 AI</div>
+
+      <p style="margin-top: 14px; font-size: 13px;">
+        <strong>你的工作量：</strong>之前 5 小时备 20 题，现在 30 分钟。
+        <br><strong>小李体验：</strong>跟以前一样，只是材料更多更新。
+        <br><strong>本质：</strong>这是<strong>你的内部生产力工具</strong>。
+      </p>
+    </div>
+
+    <div class="scene b">
+      <h3>路径 B · 学生对话 bot</h3>
+      <p style="font-size: 13px; color: #1e3a8a;">小李<strong>直接跟 AI 对话</strong>，你不在中间。</p>
+
+      <div class="step"><strong>周一</strong> 你把 bot 链接发给小李（一次性）</div>
+      <div class="step"><strong>任何时候</strong> 小李打开 bot，输入"我想练'描述一次旅行'"</div>
+      <div class="step"><strong>实时</strong> AI 出题卡，小李口语录音上传</div>
+      <div class="step"><strong>实时</strong> AI 给小李评分 + 范文 + 错误反馈</div>
+      <div class="step"><strong>持续</strong> 小李一周练 5 次，你晚上看后台知道他练了什么</div>
+
+      <p style="margin-top: 14px; font-size: 13px;">
+        <strong>你的工作量：</strong>前期搭 bot 几天，后续<strong>0</strong>。
+        <br><strong>小李体验：</strong>24/7 随时可练，反馈即时。
+        <br><strong>本质：</strong>这是<strong>面向学员的产品</strong>。
+      </p>
+    </div>
+
+  </div>
+
+  <div class="reasoning">
+    <strong>差别一句话</strong>：A 是给你减负（教研产线），B 是给学生增值（自学产品）。两个都有价值，但解决的<strong>不是同一件事</strong>。
+  </div>
+</div>
+
+<!-- 4. 平台能力表 -->
+<div class="section">
+  <h2>4 个候选平台能力一览<span class="verified">已查证</span></h2>
+
+  <table class="platforms">
+    <tr>
+      <th>平台</th>
+      <th>能做 A（批量生成）</th>
+      <th>能做 B（学生对话）</th>
+      <th>你的访问权限</th>
+      <th>难度</th>
+    </tr>
+    <tr>
+      <td class="tool">飞书多维表格<br>+ AI 字段</td>
+      <td class="yes">✓ 这就是设计用途</td>
+      <td class="no">✗ 不支持对话界面</td>
+      <td class="yes">✓ 你已有 / 已搭</td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td class="tool">飞书 Aily<br>（智能伙伴）</td>
+      <td class="partial">~ 可以但不是设计用途</td>
+      <td class="yes">✓ 飞书生态原生方案</td>
+      <td class="no">✗ 企业版，你没权限</td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td class="tool">Coze</td>
+      <td class="partial">~ 能做但是麻烦</td>
+      <td class="yes">✓ 10 分钟搭好，分发好</td>
+      <td class="no">✗ 个人版没权限</td>
+      <td>低</td>
+    </tr>
+    <tr>
+      <td class="tool">Dify</td>
+      <td class="partial">~ 能做但是绕</td>
+      <td class="yes">✓ RAG 强，能私有部署</td>
+      <td class="yes">✓ 开源 + 云版免费</td>
+      <td>中</td>
+    </tr>
+  </table>
+
+  <div class="reasoning">
+    <strong>结论</strong>：
+    <div class="step">→ <strong>A 路径</strong>最合适的工具就是<strong>飞书多维表格</strong>（你已经用对了）</div>
+    <div class="step">→ <strong>B 路径</strong>最合适的工具是 <strong>Dify</strong>（因为 Coze / Aily 都把你卡在权限外）</div>
+  </div>
+</div>
+
+<!-- 5. 推理：为什么先 A 再 B -->
+<div class="section">
+  <h2>为什么我推荐"先 A，E1 再做 B"，而不是 C（同时做）</h2>
+
+  <div class="reasoning">
+    <strong>理由 1 · 沉没成本</strong>
+    <div class="step">你昨天 80% 工作已经投在 A 路径。推翻去做 B，等于浪费 1 整天。</div>
+
+    <strong>理由 2 · W1 时间预算</strong>
+    <div class="step">16 周计划里 W1 只给 T1 一个任务。如果硬塞 C（A + B），W1 完不成，后面 P 系列开始就会连锁延迟。</div>
+
+    <strong>理由 3 · E1 槽位本来就是为 B 准备的</strong>
+    <div class="step">看你的 execution_tracker_data.js：E 系列（E1-E5）= "5 个企业级作品 / 老工具 AI 升级"，每个有 3-4 周。E1 完全可以做"学生端 Part 2 对话 bot（Dify 版）"。</div>
+
+    <strong>理由 4 · 拆两步反而故事更好讲</strong>
+    <div class="step">面试时你可以说："T1 阶段我先用飞书做了教研后台验证 prompt 设计可行；E1 阶段我把它升级成 Dify 学生端 bot，做完后两个系统打通 = 完整的双端 AI 教育产品。"——这是<strong>迭代思路</strong>，比一次性吃下 C 听起来更产品经理。</div>
+  </div>
+</div>
+
+<!-- 6. 路线图 -->
+<div class="section">
+  <h2>建议的路线图</h2>
+
+  <div class="roadmap">
+    <div class="rm-box rm-now">
+      <div class="when">本周 W1</div>
+      <strong>T1 · A 路径</strong>
+      <p style="margin: 8px 0 0; font-size: 12px;">飞书表格收尾<br>测试通过 → push GitHub</p>
+    </div>
+    <div class="rm-arrow">→</div>
+    <div class="rm-box rm-later">
+      <div class="when">W2-W4</div>
+      <strong>T2-T4 + P1-P4</strong>
+      <p style="margin: 8px 0 0; font-size: 12px;">按原计划走<br>API / RAG / Workflow</p>
+    </div>
+    <div class="rm-arrow">→</div>
+    <div class="rm-box rm-future">
+      <div class="when">W5-W8</div>
+      <strong>E1 · B 路径</strong>
+      <p style="margin: 8px 0 0; font-size: 12px;">Dify 学生对话 bot<br>串联 T1 出来的 prompt</p>
+    </div>
+  </div>
+
+  <p style="margin-top: 14px; font-size: 14px; color: #4b5563;">
+    <strong>到 W8 你会有</strong>：教师后台（飞书）+ 学生前台（Dify）+ 中间衔接的 prompt 工程经验 = 一个完整的 AI 教育产品故事。
+  </p>
+</div>
+
+<!-- 7. 你要回的事 -->
+<div class="section" style="background: #1e293b; color: white;">
+  <h2 style="color: white; border-left-color: #fbbf24;">你只要回我一句话</h2>
+
+  <p style="font-size: 17px; margin: 14px 0;">
+    <strong>"OK，按你说的，T1 走 A，E1 再做 B"</strong> → 我们继续推 T1 收尾
+  </p>
+  <p style="font-size: 15px; opacity: 0.85;">
+    或者告诉我你不同意哪一条，我们重新讨论。
+  </p>
+</div>
+
+<!-- 8. 信息来源 -->
+<div class="sources">
+  <strong>本文事实来源（你可以自己点开核验）：</strong>
+  <ul>
+    <li><a href="https://www.feishu.cn/hc/zh-CN/articles/464880997049" target="_blank">飞书帮助中心 · 使用多维表格 AI 字段捷径</a></li>
+    <li><a href="https://www.feishu.cn/content/3d5z9ttt" target="_blank">飞书 aily 官方介绍</a></li>
+    <li><a href="https://www.feishu.cn/product/base" target="_blank">飞书多维表格官网</a></li>
+    <li><a href="https://www.53ai.com/news/dify/2024122476928.html" target="_blank">Coze / Dify / FastGPT 全方位对比</a></li>
+    <li><a href="https://zhuanlan.zhihu.com/p/2004131854995977078" target="_blank">Dify / n8n / Coze 三大主流 AI Agent 平台解析</a></li>
+  </ul>
+</div>
+
+</body>
+</html>
