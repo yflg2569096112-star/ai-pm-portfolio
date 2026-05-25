@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>P1 · Duolingo Max 深度拆解 — 30 美金月费的 AI 老师，正在被 Duolingo 自己降级</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+    color: #1f2937;
+    line-height: 1.75;
+    background: #f7f7f8;
+  }
+  h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.4px; line-height: 1.35; }
+  .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 28px; }
+  .meta-bar {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 24px;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+  }
+  .meta-bar strong { color: #1f2937; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: white;
+    padding: 32px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 14px rgba(30,58,138,0.25);
+  }
+  .hero h2 {
+    color: white;
+    border-left-color: #fbbf24;
+    font-size: 22px;
+    margin: 0 0 14px;
+  }
+  .hero .lead {
+    font-size: 17px;
+    background: rgba(255,255,255,0.13);
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin: 12px 0;
+    line-height: 1.7;
+  }
+  .hero .tldr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .tldr-card {
+    background: rgba(255,255,255,0.13);
+    padding: 14px 16px;
+    border-radius: 10px;
+    border-left: 3px solid #fbbf24;
+  }
+  .tldr-card .num {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fbbf24;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .tldr-card .text { font-size: 13px; line-height: 1.6; }
+
+  /* Section */
+  .section {
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 16px;
+    border-left: 4px solid #2563eb;
+    padding-left: 12px;
+  }
+  h3 { font-size: 16px; margin: 18px 0 8px; color: #1f2937; }
+  p { margin: 8px 0; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 13.5px;
+  }
+  th, td {
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f3f4f6; font-weight: 600; }
+
+  /* Callouts */
+  .callout {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .callout-warn {
+    background: #fef2f2;
+    border-left: 4px solid #dc2626;
+  }
+  .callout-warn .lab {
+    font-weight: 700;
+    color: #991b1b;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+  .callout-note {
+    background: #fefce8;
+    border-left: 4px solid #ca8a04;
+  }
+  .callout-note .lab {
+    font-weight: 700;
+    color: #854d0e;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+  .callout-ok {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+  }
+  .callout-ok .lab {
+    font-weight: 700;
+    color: #166534;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+
+  /* Architecture diagram */
+  .arch {
+    background: #fafafa;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    margin: 16px 0;
+  }
+  .arch-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+    margin: 8px 0;
+  }
+  .node {
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    border: 2px solid;
+    text-align: center;
+    font-size: 12.5px;
+  }
+  .node.user { border-color: #3b82f6; }
+  .node.duolingo { border-color: #16a34a; }
+  .node.llm { border-color: #f59e0b; }
+  .node-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .node-sub { color: #6b7280; font-size: 11.5px; }
+  .arrow { font-size: 22px; color: #6366f1; text-align: center; }
+
+  /* Pos before/after */
+  .positioning {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+  .pos-before, .pos-after {
+    padding: 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+  }
+  .pos-before {
+    background: #fef2f2;
+    border: 2px solid #fca5a5;
+  }
+  .pos-after {
+    background: #f0fdf4;
+    border: 2px solid #6ee7b7;
+  }
+  .pos-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .pos-before .pos-label { color: #991b1b; }
+  .pos-after .pos-label { color: #166534; }
+
+  /* Quote */
+  blockquote {
+    border-left: 4px solid #cbd5e1;
+    padding: 8px 16px;
+    margin: 12px 0;
+    color: #475569;
+    font-size: 14px;
+    background: #f8fafc;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Move-to-IELTS card grid */
+  .ielts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .ielts-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #6ee7b7;
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .ielts-card .head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .ielts-card .badge {
+    background: #047857;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.4px;
+  }
+  .ielts-card .title { font-weight: 700; font-size: 15px; }
+  .ielts-card .source-map {
+    font-size: 11.5px;
+    color: #475569;
+    margin-top: 6px;
+    background: rgba(255,255,255,0.6);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  /* Lessons */
+  .lessons {
+    counter-reset: lesson;
+  }
+  .lesson {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    margin: 14px 0;
+    align-items: start;
+  }
+  .lesson::before {
+    counter-increment: lesson;
+    content: counter(lesson);
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .lesson-text { font-size: 14px; line-height: 1.7; }
+  .lesson-text strong { color: #1e3a8a; }
+
+  /* Sources */
+  .sources {
+    background: #f9fafb;
+    border-radius: 14px;
+    padding: 22px 26px;
+    font-size: 12.5px;
+    color: #4b5563;
+  }
+  .sources h2 { color: #4b5563; border-left-color: #9ca3af; }
+  .sources ul { padding-left: 18px; }
+  .sources a { color: #2563eb; text-decoration: none; word-break: break-all; }
+  .sources a:hover { text-decoration: underline; }
+  .src-tier {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 6px;
+    letter-spacing: 0.4px;
+  }
+  .src-strong { background: #dcfce7; color: #166534; }
+  .src-mid { background: #fef3c7; color: #854d0e; }
+  .src-weak { background: #fee2e2; color: #991b1b; }
+
+  .small { font-size: 12px; color: #6b7280; }
+</style>
+</head>
+<body>
+
+<h1>30 美金月费的 AI 老师，正在被 Duolingo 自己降级</h1>
+<div class="subtitle">P1 · Duolingo Max 深度拆解 ｜ 战略变阵 → 功能矩阵 → AI 架构 → 9% 渗透率 → 移植雅思的 5 条动作</div>
+
+<div class="meta-bar">
+  <span><strong>写于：</strong>2026-05-24（W1 D3）</span>
+  <span><strong>赛道：</strong>AI 教育 / 语言学习</span>
+  <span><strong>读完用：</strong>约 8 分钟</span>
+  <span><strong>用途：</strong>面试谈"你怎么看 Duolingo Max" / 集团级 AI 解决方案立项参考</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>核心判断 · 一句话版</h2>
+  <div class="lead">
+    Duolingo Max 在 2026 Q1 财报里官宣了一件事：把 Max 独占的 Video Call 功能下放到便宜得多的 Super 层。这个动作翻译过来就是——<strong>"我们押注了 30 美金 AI 老师，但只有 9% 的付费用户买单，于是改打 Super 走量。"</strong> 对所有做 AI 教育产品的人来说，这是过去 12 个月里最重要的一份失败教训，比任何成功案例都值钱。
+  </div>
+  <div class="tldr-grid">
+    <div class="tldr-card">
+      <div class="num">FINDING 01</div>
+      <div class="text">Max 占付费用户 <strong>9%</strong>（约 98 万人），Duolingo 决定把 Video Call 下放 Super 让"10 倍多人用上"——这是渗透率不达预期的官方信号。</div>
+    </div>
+    <div class="tldr-card">
+      <div class="num">FINDING 02</div>
+      <div class="text">所有差评指向同一句话——<strong>"ChatGPT 免费能做"</strong>。Max 的护城河（角色 IP + 课程结构 + 跨 session 记忆）撑不住 $29.99/月。</div>
+    </div>
+    <div class="tldr-card">
+      <div class="num">FINDING 03</div>
+      <div class="text">雅思赛道几乎没有 Max 级别的整合产品，<strong>全是 GPT 套壳小工具</strong>。这对国内雅思培训机构是明确的产品空白点。</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 · 钩子 -->
+<div class="section">
+  <h2>① 战略变阵：Duolingo 自己给 Max 撤了招牌功能</h2>
+  <p>2026 年 4 月底，Duolingo 在 Q1 FY26 财报里宣布：原本 <strong>Max 独占</strong>的 Video Call（和虚拟角色 Lily 视频对话）功能，将下放到便宜得多的 <strong>Super</strong> 层。CEO Luis von Ahn 的理由原话是"<em>让 10 倍多的人用上它，他们学得更好就会告诉朋友</em>"。</p>
+
+  <p>这句话听上去像增长策略调整，但拆开来看是一份失败的市场反馈书：</p>
+
+  <table>
+    <tr><th>层级</th><th>定价</th><th>核心功能</th><th>2026 变动</th></tr>
+    <tr><td>Free</td><td>免费</td><td>课程 + 广告 + 体力限制</td><td>—</td></tr>
+    <tr><td>Super</td><td>~$84/年（$7/月）</td><td>无广告、无限体力、Practice Hub</td><td><strong>+ Explain My Answer（2026-01 下放）<br>+ Video Call（2026 Q1 起下放）</strong></td></tr>
+    <tr><td>Max</td><td>$29.99/月 或 $168/年</td><td>原本独占：Roleplay / Explain / Video Call</td><td>独占项剩下 Roleplay + Adventures</td></tr>
+  </table>
+
+  <div class="callout callout-warn">
+    <div class="lab">关键数据</div>
+    Q1 FY26 财报里 Max 渗透率 <strong>约 9% of paid subs</strong>（按付费用户 12.5M 折算约 98 万人），比 Q1 2025 的 7% 略升。但 Q1 2026 订阅毛利提升 190bp 的归因，CEO 给的是"AI 单位成本下降"，<strong>不是 Max 渗透提升</strong>——这意味着 Max 的 ARPU 拉动效应在管理层眼里已经低于"Super 走量 + AI 成本下降"。
+  </div>
+
+  <p>用 PM 视角翻译：Duolingo 押了一年多的 <strong>"AI 教师独立付费层"</strong> 假设，结果让 91% 付费用户用脚投票说"我不需要"。降功能不是分发策略，是定价策略的撤退。</p>
+</div>
+
+<!-- SECTION 2 · 功能矩阵 -->
+<div class="section">
+  <h2>② 功能矩阵：四件套到底各自解决什么问题</h2>
+  <p>Max 当前包含 4 个核心 AI 功能，对应 4 种语言学习中的真实痛点。理解每个功能"输入 → 输出"的精确链路，比记功能名重要 100 倍——这是面试时被追问"Roleplay 和 ChatGPT Voice 有什么本质区别"能不能答上的关键。</p>
+
+  <table>
+    <tr><th>功能</th><th>解决的痛点</th><th>交互链路</th><th>上线 / 演进</th></tr>
+    <tr>
+      <td><strong>Roleplay</strong></td>
+      <td>"我学了词，但不敢开口"</td>
+      <td>文本对话 → AI 角色回复 → 对话结束后给 <strong>准确度/复杂度/词汇多样性</strong> 三维 AI 反馈</td>
+      <td>2023-03 首发，GPT-4 上线日</td>
+    </tr>
+    <tr>
+      <td><strong>Explain My Answer</strong></td>
+      <td>"我做错了不知道为什么"</td>
+      <td>错题 → GPT-4 用学习者语言解释语法/词汇 → 给类似例句</td>
+      <td>2023-03 首发，2026-01 全用户免费</td>
+    </tr>
+    <tr>
+      <td><strong>Video Call (Lily)</strong></td>
+      <td>"我需要真实对话练习"</td>
+      <td>语音输入 → STT → GPT-4 Turbo → TTS → Lily 角色说出来 + 对话结束给 transcript review</td>
+      <td>2024-09 DuoCon 首发；2025 扩到 9 语言、加 onboarding/real-time feedback</td>
+    </tr>
+    <tr>
+      <td><strong>Adventures</strong></td>
+      <td>"我学的东西不知道什么时候用得上"</td>
+      <td>3D 场景中和 Lily/Oscar 完成任务（点咖啡、过海关）</td>
+      <td>2024-09 公布，2025 起 mid-2026 推 Speaking Adventures</td>
+    </tr>
+  </table>
+
+  <div class="callout callout-note">
+    <div class="lab">观测 vs 推测</div>
+    Video Call 的技术链路（"STT → GPT-4 Turbo → TTS 三段式，<strong>不是</strong> OpenAI Realtime API"）是<strong>评测者推测</strong>，Duolingo 官方未公开。但用户体验的"Lily 经常 1-2 秒延迟、对方说话识别差"等吐槽间接支持这个推断。如果 2026 下半年 Duolingo 没切换 Realtime API，Lily 的"距离感"会持续成为差评高频词。
+  </div>
+</div>
+
+<!-- SECTION 3 · AI 架构 -->
+<div class="section">
+  <h2>③ AI 技术架构：GPT-4 + 自研模型 + 人工写脚本的三明治</h2>
+  <p>Duolingo 在 SEC 申报里有一句关键原话：<em>"We're not using GPT-4 'off the shelf.' We're combining GPT-4 with our proprietary machine learning systems."</em> 这句话拆开是三层架构——</p>
+
+  <div class="arch">
+    <div class="arch-row">
+      <div class="node user">
+        <div class="node-title">学习者</div>
+        <div class="node-sub">输入：选择话题 / 答错题 / 发起 Video Call</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node duolingo">
+        <div class="node-title">Duolingo 应用层</div>
+        <div class="node-sub">Birdbrain（自研 ML）<br>课程生成 + 难度自适应 + 学员画像</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node llm">
+        <div class="node-title">OpenAI API</div>
+        <div class="node-sub">GPT-4 / GPT-4 Turbo<br>对话生成 + 反馈生成</div>
+      </div>
+    </div>
+    <p class="small" style="text-align:center;margin-top:14px;">↑ 中间还有一层<strong>人类脚本师</strong>：Roleplay 的所有场景由人工撰写，专家会写"开场白"和告诉模型"对话往哪个方向走"。Duolingo 自己叫这是 <em>human-in-the-loop</em>。</p>
+  </div>
+
+  <h3>这套架构想解决什么问题</h3>
+  <ul>
+    <li><strong>GPT-4 不可控的问题</strong>——靠人工写场景 + 起手 prompt 锚定，避免学员在低水平时被复杂表达冲垮</li>
+    <li><strong>个性化难做的问题</strong>——靠 Birdbrain 维持学员画像（哪些题错过、哪些词没掌握），喂给 GPT-4 当 context</li>
+    <li><strong>记忆问题</strong>——Lily "记得上次对话的内容"，跨 session 记忆机制官方没公开具体实现</li>
+  </ul>
+
+  <div class="callout callout-note">
+    <div class="lab">教训预告</div>
+    这套架构最贵的部分不是 GPT-4 token 费用，是<strong>人类脚本师</strong>。Duolingo 能撑得起，是因为它有规模化的语言专家团队。这条线后面"移植雅思"会反复回到——大多数教培机构想抄 Max 都会栽在这一步。
+  </div>
+</div>
+
+<!-- SECTION 4 · 商业拷问 -->
+<div class="section">
+  <h2>④ 商业模式拷问：9% 渗透 + ChatGPT 平替之问</h2>
+
+  <p>把 Max 的处境放到一张资产负债表上看：</p>
+
+  <div class="positioning">
+    <div class="pos-before">
+      <div class="pos-label">⚠️ Max 当前的问题</div>
+      <ul>
+        <li>占付费用户 9%，多数付费用户拒绝再加 $84/年</li>
+        <li>Video Call 已下放 Super，Roleplay 变成唯一独占</li>
+        <li>差评核心论点：<strong>ChatGPT 免费能做</strong></li>
+        <li>Citron Research 2025-04 做空 DUOL，直接喊话 "Max is a mirage"</li>
+        <li>Q1 2026 毛利提升来自 AI 成本下降，不来自 Max</li>
+      </ul>
+    </div>
+    <div class="pos-after">
+      <div class="pos-label">✅ Duolingo 整体反而是赢家</div>
+      <ul>
+        <li>Q1 FY26 收入 $292M（+27% YoY）</li>
+        <li>DAU 56.5M（+21%）/ 付费用户 12.5M（+21%）</li>
+        <li>订阅毛利 73%（AI 单位成本下降）</li>
+        <li>FY25 全年 $1.038B（+39%）</li>
+        <li>结论：增长靠 Super 走量 + 全球扩张，<strong>不靠 Max</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>"ChatGPT 平替之问"</h3>
+  <p>翻完几十条 Reddit / Medium / 评测博客差评，几乎所有都收敛到同一个论点：</p>
+  <blockquote>
+    "Roleplay... 我直接让 ChatGPT 装成西语侍者跟我对话，能不能？能。<strong>不要钱</strong>。"<br>
+    <span class="small">—— Nuclear Monster 评测（2025-06），inine.medium.com（2024-09）</span>
+  </blockquote>
+  <p>这是 Max 这类 <strong>"LLM-as-product"</strong> 产品的结构性挑战。当底层 LLM 是通用的、用户自己也能调用（ChatGPT $20/月），AI 教育产品要溢价 50%（Max 比 Super 贵 $84/年），必须证明你提供的是 LLM 给不了的——课程结构、角色 IP、长期画像、本地化教学法。</p>
+
+  <p>Duolingo Max 押宝的是<strong>角色 IP + 课程结构 + 跨 session 记忆</strong>。市场结论是：这三样加起来，<strong>大多数用户不愿意付 $14/月差价</strong>。</p>
+</div>
+
+<!-- SECTION 5 · 移植雅思（占 30%）-->
+<div class="section">
+  <h2>⑤ 移植到雅思：5 条具体可落地的动作</h2>
+  <p>这一节是这篇拆解的核心，也是面试讲故事 / 集团级方案立项最该挖的地方。我作为雅思老师 + 三个雅思教学工具的开发者，把 Max 的 4 个功能 + 1 个架构选择，逐一映射到雅思场景：</p>
+
+  <div class="ielts-grid">
+
+    <div class="ielts-card">
+      <div class="head">
+        <span class="badge">动作 1</span>
+        <span class="title">把 Roleplay 改造成"雅思 Part 2 题卡对话演练"</span>
+      </div>
+      <p>Max Roleplay 的精髓不是 AI 会聊天，是<strong>人类脚本师把场景锚定在学习者刚学过的词汇/句型上</strong>，然后让 GPT-4 在这个轨道里跑。雅思 Part 2 题卡天然就是脚本（话题 + 4 个 prompt 点 + 评分维度），把 Part 2 的 50 个高频题卡 × Roleplay 化，等于做了"雅思版 Side Quest"。</p>
+      <div class="source-map">▸ 对应你灵感库 #9 Voice based interaction ｜ 我已有口语 Flashcard 工具，可作为 E3 升级方向</div>
+    </div>
+
+    <div class="ielts-card">
+      <div class="head">
+        <span class="badge">动作 2</span>
+        <span class="title">把 Explain My Answer 改造成"写作错题语法卡"</span>
+      </div>
+      <p>这个功能是 Max 投入产出比最高的一个——它就是把"批改报告"做得让学生愿意看完。雅思 Task 1/2 批改最大的痛点不是评不出分，是<strong>学生看完反馈不知道下一步该练什么</strong>。Explain My Answer 模板（错题 + 用学习者母语解释语法 + 类似例句）几乎可以原封不动套到雅思写作四维评分上。</p>
+      <div class="source-map">▸ 对应你灵感库 #2 Essay drafting and feedback ｜ 我已有 Task1 工具 = E1 升级方向，可加"我为什么错"模块</div>
+    </div>
+
+    <div class="ielts-card">
+      <div class="head">
+        <span class="badge">动作 3</span>
+        <span class="title">Video Call 移植成"AI 雅思考官 Part 1/3 模拟"——但慎做</span>
+      </div>
+      <p>这是最诱人也最容易翻车的方向。诱人在哪：雅思 Speaking 全球考生最缺的就是真实模考，Joe Speaking / AI IELTS 这些小工具就是看到了空白。慎在哪：Lily 这个 IP 花了 Duolingo 8 年才养出来，独立做 AI 考官形象基本无解；如果只是 GPT-4 + TTS 包一层，你做的和 ChatGPT Voice 没区别——<strong>这就是 Duolingo Max 现在被打的脸</strong>。可行路径是绑定<strong>真实雅思考官 / 名师 IP</strong>（新航道集团的资源刚好可用）。</p>
+      <div class="source-map">▸ 对应你灵感库 #9 Voice + #6 Narrative-based progress reports ｜ 走集团方案而非 indie 产品</div>
+    </div>
+
+    <div class="ielts-card">
+      <div class="head">
+        <span class="badge">动作 4</span>
+        <span class="title">Birdbrain 那一层 = "学员画像 + 错题档案"——这是新航道护城河该建的地方</span>
+      </div>
+      <p>Max 最难抄的不是 GPT-4 调用，是 Birdbrain 维持的<strong>学员长期画像 + 难度自适应</strong>。这恰好是新航道这类集团做学员管理已经在做的事（出勤、模考、错题）——只是没用 AI 整合。把这套数据喂给 GPT-4 当 context，等于做了一个"知道这个学员上周哪道 Heading Matching 错过"的 AI 助教。<strong>大多数 indie 工具做不到这一层，因为没有学员数据。</strong></p>
+      <div class="source-map">▸ 对应你灵感库 #3 AI memory for long-lasting tutor + #8 Goal setting and study advisory ｜ T3 RAG + T5 MCP 的核心应用</div>
+    </div>
+
+    <div class="ielts-card">
+      <div class="head">
+        <span class="badge">动作 5</span>
+        <span class="title">不做 Max 层，做 Super 层——按 Duolingo 自己的撤退路径走</span>
+      </div>
+      <p>这是最反常识但最重要的一条。<strong>Duolingo 自己用 Q1 2026 财报告诉所有人，AI 教育产品的合理定价不是 "AI 独立付费层"，是 "AI 嵌入到现有付费产品"。</strong> 翻译到雅思场景：不要做"30 美金/月的 AI 雅思教练独立 App"，要做"集团旗下网课/一对一/线下班的 AI 增强能力"。这是新航道这种集团比所有 indie 工具天然有优势的赛道——你已经有付费学员，把 AI 加进去就行。</p>
+      <div class="source-map">▸ 这是这篇拆解最重要的一条 ｜ 对应 PROJECT_CONTEXT 里"集团级解决方案"定位</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 6 · 5 教训 -->
+<div class="section">
+  <h2>⑥ 给所有 AI 教育产品的 5 个教训</h2>
+  <div class="lessons">
+    <div class="lesson"><div class="lesson-text"><strong>LLM-as-product 没有护城河。</strong>用户可以直接付 $20/月用 ChatGPT 解决 80% 你的功能。要么往上做（角色 IP + 课程结构 + 长期数据），要么往下做（嵌入现有教学工作流）。中间地带最危险。</div></div>
+    <div class="lesson"><div class="lesson-text"><strong>AI 反馈的"可看完率"比"准确率"重要。</strong>Explain My Answer 是 Max 投入产出比最高的功能，因为它解决的是"反馈被用户读完"这个真问题，不是"反馈精确度多高"这个伪问题。</div></div>
+    <div class="lesson"><div class="lesson-text"><strong>语音对话功能要么做到 Realtime 级别，要么不如不做。</strong>Lily 被吐槽"无聊、慢、识别差"，根源就是 STT→LLM→TTS 三段链路的延迟和情感缺失。2025 后没切 Realtime API 的语音教学产品都会被边缘化。</div></div>
+    <div class="lesson"><div class="lesson-text"><strong>定价层级是教学法的承诺，不是营销话术。</strong>把功能从 Max 撤回 Super，等于公开承认"我们错估了用户为 AI 教师付费的意愿"。任何想做 AI 教育产品的人，先回答这个问题：用户为什么愿意为 AI 多付 50% 的钱。</div></div>
+    <div class="lesson"><div class="lesson-text"><strong>有学员数据的玩家有不公平优势。</strong>Birdbrain 那一层是 Duolingo 真正抄不动的东西。集团/培训机构/学校手里的学员长期数据，是 GPT-4 时代最被低估的资产。</div></div>
+  </div>
+</div>
+
+<!-- 我的判断 + 待复核 -->
+<div class="section">
+  <h2>⑦ 我的判断 + 还没核对清楚的事</h2>
+  <p>Duolingo Max 的 12 个月不是"AI 教育的失败"，是<strong>"AI 教育独立付费层的失败"</strong>。Duolingo 整体在 AI 时代过得非常好——FY25 收入 +39%、Q1 FY26 毛利提升、AI 单位成本下降。失败的是"用一个新付费层卖 AI"这个产品决策。</p>
+  <p>对所有想做 AI 教育产品的人，结论清晰：<strong>不要再问"我要不要做一个 AI 教师 App"，要问"我能把 AI 嵌入到哪个现有教学工作流里去"。</strong>对新航道这种已经有付费学员/教师/课程的集团来说，这条路反而是顺风的——本来就有 Super 层（学员），缺的只是 AI 整合层。</p>
+
+  <div class="callout callout-note">
+    <div class="lab">待复核 · 这篇没拿到一手证据的地方</div>
+    <ul style="margin:6px 0;">
+      <li>Max 渗透率 <strong>9%</strong>：来自 Q1 FY26 earnings call 的 CEO 表态<strong>二手转述</strong>。需要 Duolingo Q1 FY26 shareholder letter 原文确认。</li>
+      <li>Video Call 是 <strong>STT→GPT-4→TTS 三段式</strong> 而非 Realtime API：仅评测者推测，Duolingo 官方未表态。</li>
+      <li>Birdbrain 的<strong>跨 session 长期记忆机制</strong>：仅知道"Lily 记得上次对话"，技术实现未公开。</li>
+      <li>r/duolingo 真实用户差评：本轮未抓到原始帖，仅靠评测博客拼凑——结论是"ChatGPT 能免费做"这一点有较强共识，但具体数量和分布需 Reddit 站内搜索补。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SOURCES -->
+<div class="sources">
+  <h2>证据来源（按强度梯队）</h2>
+
+  <h3 style="color:#166534;">▸ 强证据（一手 / SEC 申报 / 官方公告）</h3>
+  <ul>
+    <li><span class="src-tier src-strong">一手</span><a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026029790/q1fy26duolingo3-31x26share.htm">Duolingo Q1 FY26 8-K · SEC（财报数据 + Video Call 下放 Super 官宣）</a></li>
+    <li><span class="src-tier src-strong">一手</span><a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026012246/q4fy25duolingo12-31x25shar.htm">Duolingo Q4 FY25 8-K · SEC</a></li>
+    <li><span class="src-tier src-strong">一手</span><a href="https://www.sec.gov/Archives/edgar/data/0001562088/000156208823000101/duolingo_q1-2023xshareho.htm">Duolingo Q1 2023 Shareholder Letter · GPT-4 + 自研模型表态原文</a></li>
+    <li><span class="src-tier src-strong">官方</span><a href="https://blog.duolingo.com/duolingo-max/">Duolingo 官方博客 · Duolingo Max 首发</a></li>
+    <li><span class="src-tier src-strong">官方</span><a href="https://blog.duolingo.com/video-call/">Duolingo 官方博客 · Video Call (Lily)</a></li>
+    <li><span class="src-tier src-strong">官方</span><a href="https://investors.duolingo.com/news-releases/news-release-details/duolingo-introduces-ai-powered-innovations-duocon-2024">DuoCon 2024 · Video Call + Adventures + In-lesson Coach 公告</a></li>
+    <li><span class="src-tier src-strong">官方</span><a href="https://duolingo-papers.s3.amazonaws.com/reports/Duolingo_whitepaper_language_video_call_improves_speaking_2025.pdf">Duolingo 自家 RCT 白皮书 · Video Call 提升口语（自家研究，需中性看）</a></li>
+  </ul>
+
+  <h3 style="color:#854d0e;">▸ 中证据（行业媒体 / 评测 / 二手转述）</h3>
+  <ul>
+    <li><span class="src-tier src-mid">二手</span><a href="https://www.theglobeandmail.com/investing/markets/markets-news/motley/1697195/duolingo-duol-q1-2026-earnings-transcript/">Globe &amp; Mail · Q1 2026 Earnings Transcript（Max 9% 渗透来源）</a></li>
+    <li><span class="src-tier src-mid">评测</span><a href="https://nuclearmonster.com/2025/06/duolingo-max-is-expensive-sad-and-ineffective/">Nuclear Monster · Duolingo Max is Expensive, Sad and Ineffective（2025-06）</a></li>
+    <li><span class="src-tier src-mid">评测</span><a href="https://inine.medium.com/why-duolingo-max-is-just-a-waste-of-money-630ca1194d90">Medium · Why Duolingo Max is Just a Waste of Money</a></li>
+    <li><span class="src-tier src-mid">评测</span><a href="https://davidwilliamrosales.com/2025/09/27/duolingo-max-review/">David William Rosales · 2 年用户长期评测（正面）</a></li>
+    <li><span class="src-tier src-mid">评测</span><a href="https://theowlandme.blog/2026/01/10/review-duolingo-max-video-calls/">The Owl and Me · Video Call 长期评测（2026-01）</a></li>
+    <li><span class="src-tier src-mid">分析</span><a href="https://bernardmarr.com/the-amazing-ways-duolingo-is-using-ai-and-gpt-4/">Bernard Marr · Birdbrain + GPT-4 架构分析</a></li>
+    <li><span class="src-tier src-mid">空头</span><a href="https://x.com/CitronResearch/status/1915787091264651465">Citron Research · "Max is a mirage" 做空报告</a></li>
+    <li><span class="src-tier src-mid">中文</span><a href="https://zhuanlan.zhihu.com/p/821477175">知乎 · Duolingo Plus/Super/Max 区别</a></li>
+  </ul>
+
+  <h3 style="color:#991b1b;">▸ 弱证据 / 缺口（待补）</h3>
+  <ul>
+    <li><span class="src-tier src-weak">缺口</span>Video Call 真实技术链路（Realtime API or 三段式）—— Duolingo 工程师 LinkedIn / Hacker News 未挖</li>
+    <li><span class="src-tier src-weak">缺口</span>r/duolingo subreddit 真实差评原始帖 —— WebSearch 未直抓</li>
+    <li><span class="src-tier src-weak">缺口</span>教育圈对 Duolingo RCT 白皮书的二次评议</li>
+  </ul>
+</div>
+
+<div class="small" style="text-align:center;margin-top:24px;">
+  P1 · Duolingo Max 深度拆解 v1 ｜ 2026-05-24 ｜ AI PM 转型 16 周训练 W1<br>
+  下一篇 P2：Speak（speak.com）·  AI 口语教练对话设计 + 反馈机制
+</div>
+
+</body>
+</html>
